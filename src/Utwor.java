@@ -8,17 +8,17 @@ public class Utwor implements Comparable<Utwor> {
 	public Utwor(String nu, String wyk, int rok, String mp3nazwa) throws Exception {
 		nazwa_utworu = nu;
 		if (nazwa_utworu == null || nazwa_utworu.isEmpty()) {
-			throw new Exception("Jestes mato³em - nazwa utworu nie mo¿e byæ pusta!");
+			throw new Exception("Nazwa utworu nie mo¿e byæ pusta!");
 		}
 		wykonawca = wyk;
 		if (wykonawca == null || wykonawca.isEmpty()) {
-			throw new Exception("Jesteœ mato³em - nazwa wykonawcy nie mo¿e byæ pusta!");
+			throw new Exception("Nazwa wykonawcy nie mo¿e byæ pusta!");
 		}
 		rok_wydania = rok;
-		
+
 		nazwa_pliku_mp3 = mp3nazwa;
 		if (nazwa_pliku_mp3 == null || nazwa_pliku_mp3.isEmpty()) {
-			throw new Exception("Plik mp3 bez nazwy? Niemo¿liwe :P");
+			throw new Exception("Nazwa pliku MP3 nie mo¿e byæ pusta!");
 		}
 	}
 
@@ -33,8 +33,9 @@ public class Utwor implements Comparable<Utwor> {
 	public int pobierz_rok() {
 		return rok_wydania;
 	}
+
 	public String pobierz_rok_tekst() {
-		String s = rok_wydania+"";
+		String s = rok_wydania + "";
 		return s;
 	}
 

@@ -9,6 +9,7 @@ import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -46,7 +47,7 @@ public class RamkaPlaylist extends JFrame implements ActionListener {
 		} catch (IllegalAccessException e) {
 			// handle exception
 		}
-		setTitle("Odtwarzacz 4.1");
+		setTitle("Odtwarzacz 4.2");
 		mojPanel = new JPanel();
 		add(mojPanel);
 		wypelnijPanel();
@@ -121,7 +122,7 @@ public class RamkaPlaylist extends JFrame implements ActionListener {
 			}
 		}
 		if (zrodlo == przyciskInfo) {
-			JOptionPane.showMessageDialog(null, "Odtwarzacz 4.1\n\nCopyright (C) 2016\nMarcin Michalczyk\nMateusz Patrzykont\nPaweł Malicki");
+			JOptionPane.showMessageDialog(null, "Odtwarzacz 4.2\n\nCopyright (C) 2019\nMarcin Michalczyk");
 		}
 		if (zrodlo == przyciskWczytaj) {
 

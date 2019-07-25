@@ -8,6 +8,7 @@ import java.io.FilenameFilter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -217,7 +218,7 @@ public class RamkaListy extends JFrame implements ActionListener {
 				}
 			} catch (Exception b) {
 				// TODO Auto-generated catch block
-				JOptionPane.showMessageDialog(null, "Podano najprawdopodobnie niewіaściwe dane!");
+				JOptionPane.showMessageDialog(null, "Podano niewłaściwe dane!");
 				return;
 			}
 		}
@@ -235,13 +236,13 @@ public class RamkaListy extends JFrame implements ActionListener {
 			}
 		}
 		if (zrodlo == przyciskOdtworzWszystko) {
-				try {
-					p = new Play2(mojePliki, lista);
-					p.start();
-				} catch (Exception e) {
-					JOptionPane.showMessageDialog(null, "Załadowano nieprawidłowy plik!");
-					return;
-				}
+			try {
+				p = new Play2(mojePliki, lista);
+				p.start();
+			} catch (Exception e) {
+				JOptionPane.showMessageDialog(null, "Załadowano nieprawidłowy plik!");
+				return;
+			}
 		}
 		int i = 0;
 		while (i < przyciskiPrzenies.size()) {

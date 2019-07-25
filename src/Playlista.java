@@ -1,7 +1,7 @@
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.io.IOException;
-import java.io.FileWriter;
 
 public class Playlista {
 	private String nazwa;
@@ -14,18 +14,19 @@ public class Playlista {
 			throw new Exception("Nazwa playlisty nie mo¿e byæ pusta!");
 		}
 	}
+
 	public String pobierz_nazwe() {
 		return nazwa;
 	}
 
-	public void dodaj(Utwor utwor){
+	public void dodaj(Utwor utwor) {
 		utwory.add(utwor);
 	}
 
 	public void usun(int j) throws Exception {
 		utwory.remove(j);
 		if (utwory == null || utwory.isEmpty()) {
-			throw new Exception(" Nie ma tyle utworów na liœcie!");
+			throw new Exception("Lista jest pusta!");
 		}
 	}
 
@@ -35,13 +36,13 @@ public class Playlista {
 
 	public String zwroc_mp3naz(int g) throws Exception {
 		if (utwory == null || utwory.isEmpty()) {
-			throw new Exception(" Nie ma tyle utworów na liœcie!");
+			throw new Exception("Lista jest pusta!");
 		}
-		return utwory.get(g).pobierz_nazwe_pliku_mp3();	
+		return utwory.get(g).pobierz_nazwe_pliku_mp3();
 	}
 
 	public void zapiszUtwor(String katalog, String plik) throws IOException {
-		FileWriter plik2 = new FileWriter(plik+"\\"+katalog);
+		FileWriter plik2 = new FileWriter(plik + "\\" + katalog);
 		for (int kj = 0; kj < utwory.size(); kj++) {
 			plik2.write(utwory.get(kj).wyswietl_utwor_plik());
 			plik2.write("\n");
@@ -49,8 +50,8 @@ public class Playlista {
 		plik2.close();
 		licznik++;
 	}
-	
-	public int size(){
+
+	public int size() {
 		return utwory.size();
 	}
 }
