@@ -11,7 +11,7 @@ public class Playlista {
 	public Playlista(String n) throws Exception {
 		nazwa = n;
 		if (nazwa == null || nazwa.isEmpty()) {
-			throw new Exception("Nazwa playlisty nie mo¿e byæ pusta!");
+			throw new Exception("Nazwa playlisty nie moÅ¼e byÄ‡ pusta!");
 		}
 	}
 

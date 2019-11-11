@@ -8,17 +8,17 @@ public class Utwor implements Comparable<Utwor> {
 	public Utwor(String nu, String wyk, int rok, String mp3nazwa) throws Exception {
 		nazwa_utworu = nu;
 		if (nazwa_utworu == null || nazwa_utworu.isEmpty()) {
-			throw new Exception("Nazwa utworu nie mo¿e byæ pusta!");
+			throw new Exception("Nazwa utworu nie moÅ¼e byÄ‡ pusta!");
 		}
 		wykonawca = wyk;
 		if (wykonawca == null || wykonawca.isEmpty()) {
-			throw new Exception("Nazwa wykonawcy nie mo¿e byæ pusta!");
+			throw new Exception("Nazwa wykonawcy nie moÅ¼e byÄ‡ pusta!");
 		}
 		rok_wydania = rok;
 
 		nazwa_pliku_mp3 = mp3nazwa;
 		if (nazwa_pliku_mp3 == null || nazwa_pliku_mp3.isEmpty()) {
-			throw new Exception("Nazwa pliku MP3 nie mo¿e byæ pusta!");
+			throw new Exception("Nazwa pliku MP3 nie moÅ¼e byÄ‡ pusta!");
 		}
 	}
 
