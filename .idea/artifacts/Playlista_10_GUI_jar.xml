@@ -5,8 +5,8 @@
       <element id="archive" name="Playlista 10 GUI.jar">
         <element id="module-output" name="Playlista 10 GUI" />
       </element>
-      <element id="library" level="module" name="12 mp3plugin.jar" module-name="Playlista 10 GUI" />
-      <element id="library" level="module" name="12 jlayer.jar" module-name="Playlista 10 GUI" />
+      <element id="library" level="project" name="mp3plugin" />
+      <element id="library" level="project" name="jlayer" />
     </root>
   </artifact>
 </component>

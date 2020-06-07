@@ -1,4 +1,4 @@
 Manifest-Version: 1.0
 Main-Class: Runner
-Class-Path: 12 mp3plugin.jar 12 jlayer.jar
+Class-Path: mp3plugin.jar jlayer.jar
 
