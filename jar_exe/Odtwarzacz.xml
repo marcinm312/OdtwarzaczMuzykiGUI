@@ -2,7 +2,7 @@
 <launch4jConfig>
   <dontWrapJar>false</dontWrapJar>
   <headerType>gui</headerType>
-  <jar>C:\Users\marci\Documents\Programowanie\IntelliJ workspaces\Playlista 10 GUI\jar_exe\Playlista 10 GUI.jar</jar>
+  <jar>C:\Users\marci\Documents\Programowanie\IntelliJ workspaces\Playlista 10 GUI\jar_exe\odtwarzacz.jar</jar>
   <outfile>C:\Users\marci\Documents\Programowanie\IntelliJ workspaces\Playlista 10 GUI\jar_exe\Odtwarzacz.exe</outfile>
   <errTitle></errTitle>
   <cmdLine></cmdLine>

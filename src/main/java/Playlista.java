@@ -23,11 +23,8 @@ public class Playlista {
         utwory.add(utwor);
     }
 
-    public void usun(int j) throws Exception {
+    public void usun(int j) {
         utwory.remove(j);
-        if (utwory == null || utwory.isEmpty()) {
-            throw new Exception("Lista jest pusta!");
-        }
     }
 
     public void posortujUtwory() {
