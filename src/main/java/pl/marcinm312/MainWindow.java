@@ -17,14 +17,13 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
 
 public class MainWindow extends JFrame implements ActionListener {
 
 	private final JPanel jPanel;
 	private static final List<Playlist> playlistList = new ArrayList<>();
 	private List<JButton> playlistShowButtons;
-	private List<JButton> playlistDeleteButtons;
+	private List<JButton> playlistRemoveButtons;
 	private List<JButton> playlistSaveButtons;
 	private JButton addPlaylistButton;
 	private JButton loadPlaylistButton;
@@ -34,46 +33,45 @@ public class MainWindow extends JFrame implements ActionListener {
 	public MainWindow() {
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-		} catch (UnsupportedLookAndFeelException | ClassNotFoundException | InstantiationException |
-				 IllegalAccessException e) {
-
+		} catch (Exception e) {
+			//Default look and feel
 		}
 		setTitle("Odtwarzacz 4.4");
 		jPanel = new JPanel();
 		add(jPanel);
-		wypelnijPanel();
+		fillWindow();
 	}
 
 	public static List<Playlist> getPlaylistList() {
 		return playlistList;
 	}
 
-	public void wypelnijPanel() {
+	private void fillWindow() {
 		jPanel.removeAll();
 		GridLayout layout = new GridLayout(playlistList.size() + 1, 4);
 		jPanel.setLayout(layout);
 		playlistShowButtons = new ArrayList<>();
-		playlistDeleteButtons = new ArrayList<>();
+		playlistRemoveButtons = new ArrayList<>();
 		playlistSaveButtons = new ArrayList<>();
 		for (Playlist playlist : playlistList) {
-			JLabel nazwa = new JLabel();
-			jPanel.add(nazwa);
-			nazwa.setText(playlist.getName());
+			JLabel labelWithName = new JLabel();
+			jPanel.add(labelWithName);
+			labelWithName.setText(playlist.getName());
 
-			JButton przyciskWyswietl = new JButton("Wyświetl playlistę");
-			playlistShowButtons.add(przyciskWyswietl);
-			jPanel.add(przyciskWyswietl);
-			przyciskWyswietl.addActionListener(this);
+			JButton playlistShowButton = new JButton("Wyświetl playlistę");
+			playlistShowButtons.add(playlistShowButton);
+			jPanel.add(playlistShowButton);
+			playlistShowButton.addActionListener(this);
 
-			JButton przyciskUsun = new JButton("Usuń playlistę");
-			playlistDeleteButtons.add(przyciskUsun);
-			jPanel.add(przyciskUsun);
-			przyciskUsun.addActionListener(this);
+			JButton playlistRemoveButton = new JButton("Usuń playlistę");
+			playlistRemoveButtons.add(playlistRemoveButton);
+			jPanel.add(playlistRemoveButton);
+			playlistRemoveButton.addActionListener(this);
 
-			JButton przyciskZapisz = new JButton("Zapisz playlistę do pliku");
-			playlistSaveButtons.add(przyciskZapisz);
-			jPanel.add(przyciskZapisz);
-			przyciskZapisz.addActionListener(this);
+			JButton playlistSaveButton = new JButton("Zapisz playlistę do pliku");
+			playlistSaveButtons.add(playlistSaveButton);
+			jPanel.add(playlistSaveButton);
+			playlistSaveButton.addActionListener(this);
 		}
 		addPlaylistButton = new JButton("Utwórz nową playlistę");
 		jPanel.add(addPlaylistButton);
@@ -83,9 +81,9 @@ public class MainWindow extends JFrame implements ActionListener {
 		jPanel.add(loadPlaylistButton);
 		loadPlaylistButton.addActionListener(this);
 
-		JLabel n4 = new JLabel();
-		jPanel.add(n4);
-		n4.setText("");
+		JLabel emptyLabel = new JLabel();
+		jPanel.add(emptyLabel);
+		emptyLabel.setText("");
 
 		showAboutButton = new JButton("O programie...");
 		jPanel.add(showAboutButton);
@@ -94,77 +92,82 @@ public class MainWindow extends JFrame implements ActionListener {
 		pack();
 	}
 
-	public void actionPerformed(ActionEvent arg0) {
-		Object zrodlo = arg0.getSource();
-		if (zrodlo == addPlaylistButton) {
-			String nazwapl = JOptionPane.showInputDialog(null, "Nazwa nowej playlisty:", "Nowa playlista",
+	public void actionPerformed(ActionEvent actionEvent) {
+		Object eventSource = actionEvent.getSource();
+
+		if (eventSource == addPlaylistButton) {
+			String playlistName = JOptionPane.showInputDialog(null, "Nazwa nowej playlisty:", "Nowa playlista",
 					JOptionPane.WARNING_MESSAGE);
-			if ((nazwapl != null) && (nazwapl.length() > 0)) {
-				try {
-					Playlist playlist = new Playlist(nazwapl);
-					if (playlistList.contains(playlist)) {
-						JOptionPane.showMessageDialog(null, "Playlista o takiej nazwie już istnieje!");
-					} else {
-						playlistList.add(playlist);
-						wypelnijPanel();
-					}
-				} catch (Exception e) {
-					JOptionPane.showMessageDialog(null, "Wystąpił nieoczekiwany błąd.");
+			try {
+				Playlist playlist = new Playlist(playlistName);
+				if (playlistList.contains(playlist)) {
+					JOptionPane.showMessageDialog(null, "Playlista o takiej nazwie już istnieje!");
+				} else {
+					playlistList.add(playlist);
+					fillWindow();
 				}
+			} catch (Exception e) {
+				JOptionPane.showMessageDialog(null, "Wystąpił błąd: " + e.getMessage());
 			}
 		}
-		if (zrodlo == showAboutButton) {
+
+		if (eventSource == showAboutButton) {
 			JOptionPane.showMessageDialog(null, "Odtwarzacz 4.4\n\nCopyright (C) 2022\nMarcin Michalczyk");
 		}
-		if (zrodlo == loadPlaylistButton) {
 
-			FileDialog fdwczytaj = new FileDialog(this, "Wczytaj", FileDialog.LOAD);
-			fdwczytaj.setFilenameFilter((dir, name) -> name.endsWith(".txt") || name.endsWith(".TXT"));
-			fdwczytaj.setVisible(true);
-			String directory = fdwczytaj.getDirectory();
-			String file = fdwczytaj.getFile();
-			try {
-				FileReader fr = new FileReader(directory + fileSeparator + file);
-				BufferedReader bfr = new BufferedReader(fr);
-				String nazwapl = JOptionPane.showInputDialog(null, "Nazwa nowo wczytanej playlisty", "Nowa playlista",
-						JOptionPane.WARNING_MESSAGE);
-				if ((nazwapl != null) && (nazwapl.length() > 0)) {
+		if (eventSource == loadPlaylistButton) {
+			FileDialog loadPlaylistFileDialog = new FileDialog(this, "Wczytaj", FileDialog.LOAD);
+			loadPlaylistFileDialog.setFilenameFilter((dir, name) -> name.toLowerCase().endsWith(".txt"));
+			loadPlaylistFileDialog.setMultipleMode(false);
+			loadPlaylistFileDialog.setVisible(true);
+			String directory = loadPlaylistFileDialog.getDirectory();
+			String file = loadPlaylistFileDialog.getFile();
+			if (file.toLowerCase().endsWith(".txt")) {
+				try (FileReader fr = new FileReader(directory + fileSeparator + file)) {
+					BufferedReader bfr = new BufferedReader(fr);
+					String playlistName = JOptionPane.showInputDialog(null, "Nazwa nowo wczytanej playlisty", "Nowa playlista",
+							JOptionPane.WARNING_MESSAGE);
 					try {
-						Playlist playlist = new Playlist(nazwapl);
+						Playlist playlist = new Playlist(playlistName);
 						if (playlistList.contains(playlist)) {
 							JOptionPane.showMessageDialog(null, "Playlista o takiej nazwie już istnieje!");
 						} else {
 							playlistList.add(playlist);
-							String linia;
-							while ((linia = bfr.readLine()) != null) {
+							String line;
+							while ((line = bfr.readLine()) != null) {
 								String[] details;
-								details = linia.split(";");
+								details = line.split(";");
 								try {
 									playlist.addSong(new Song(details[0], details[1], details[2], details[3]));
 								} catch (Exception e) {
 									JOptionPane.showMessageDialog(null,
-											"Nie dodano pliku do playlisty, ponieważ wpisane dane nie spełniają wymagań.");
+											"Wystąpił błąd podczas dodawania utworu:\n"
+													+ line + "\n"
+													+ e.getMessage());
 									break;
 								}
 							}
 						}
 						bfr.close();
-					} catch (IOException x) {
+					} catch (Exception e) {
 						JOptionPane.showMessageDialog(null,
-								"Podano niewłaściwą nazwę pliku, albo taki plik nie isnieje.");
+								"Wystąpił błąd podczas tworzenia playlisty: " + e.getMessage());
 						return;
 					}
-					wypelnijPanel();
+					fillWindow();
+				} catch (Exception e) {
+					JOptionPane.showMessageDialog(null, "Wystąpił błąd podczas wczytywania pliku: " + e.getMessage());
+					return;
 				}
-			} catch (Exception e) {
-				JOptionPane.showMessageDialog(null,
-						"Podano niewłaściwą nazwę pliku, albo taki plik nie isnieje. Upewnij się, czy wczytywany plik ma format *.txt lub *.TXT.");
+			} else {
+				JOptionPane.showMessageDialog(null, "Wczytywany plik musi mieć format *.txt lub *.TXT.");
 				return;
 			}
 		}
+
 		int i = 0;
 		while (i < playlistShowButtons.size()) {
-			if (zrodlo == playlistShowButtons.get(i)) {
+			if (eventSource == playlistShowButtons.get(i)) {
 				Playlist playlist = playlistList.get(i);
 				PlaylistWindow playlistWindow = new PlaylistWindow(playlist);
 				playlistWindow.setVisible(true);
@@ -172,24 +175,26 @@ public class MainWindow extends JFrame implements ActionListener {
 			}
 			i++;
 		}
+
 		i = 0;
-		while (i < playlistDeleteButtons.size()) {
-			if (zrodlo == playlistDeleteButtons.get(i)) {
+		while (i < playlistRemoveButtons.size()) {
+			if (eventSource == playlistRemoveButtons.get(i)) {
 				playlistList.remove(i);
 				break;
 			}
 			i++;
 		}
+
 		i = 0;
 		while (i < playlistSaveButtons.size()) {
-			if (zrodlo == playlistSaveButtons.get(i)) {
+			if (eventSource == playlistSaveButtons.get(i)) {
 				JOptionPane.showMessageDialog(null, "Pamiętaj dodać rozszerzenie *.txt do zapisywanego pliku!");
 				try {
-					FileDialog fdzapisz = new FileDialog(this, "Zapisz", FileDialog.SAVE);
-					fdzapisz.setFilenameFilter((dir, name) -> name.endsWith(".txt") || name.endsWith(".TXT"));
-					fdzapisz.setVisible(true);
-					String directory = fdzapisz.getDirectory();
-					String file = fdzapisz.getFile();
+					FileDialog savePlaylistFileDialog = new FileDialog(this, "Zapisz", FileDialog.SAVE);
+					savePlaylistFileDialog.setFilenameFilter((dir, name) -> name.endsWith(".txt") || name.endsWith(".TXT"));
+					savePlaylistFileDialog.setVisible(true);
+					String directory = savePlaylistFileDialog.getDirectory();
+					String file = savePlaylistFileDialog.getFile();
 					playlistList.get(i).savePlaylistToFile(file, directory);
 				} catch (IOException e) {
 					JOptionPane.showMessageDialog(null,
@@ -199,6 +204,6 @@ public class MainWindow extends JFrame implements ActionListener {
 			}
 			i++;
 		}
-		wypelnijPanel();
+		fillWindow();
 	}
 }

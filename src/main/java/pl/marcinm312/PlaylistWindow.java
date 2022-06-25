@@ -17,7 +17,6 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
 
 public class PlaylistWindow extends JFrame implements ActionListener {
 
@@ -34,22 +33,20 @@ public class PlaylistWindow extends JFrame implements ActionListener {
 	private transient FilesPlayer filesPlayer;
 	private final String fileSeparator = FileSystems.getDefault().getSeparator();
 
-	public PlaylistWindow(Playlist lista2) {
-		this.playlist = lista2;
+	public PlaylistWindow(Playlist playlist) {
+		this.playlist = playlist;
 		try {
-			// Set System L&F
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-		} catch (UnsupportedLookAndFeelException | ClassNotFoundException | InstantiationException |
-				 IllegalAccessException e) {
-			// handle exception
+		} catch (Exception e) {
+			//Default look and feel
 		}
-		setTitle("Playlista " + playlist.getName() + ":");
+		setTitle("Playlista " + this.playlist.getName() + ":");
 		jPanel = new JPanel();
 		add(jPanel);
-		wypelnijPanel();
+		fillWindow();
 	}
 
-	public void wypelnijPanel() {
+	private void fillWindow() {
 		jPanel.removeAll();
 		GridLayout layout2 = new GridLayout(playlist.getSongsList().size() + 2, 7);
 		jPanel.setLayout(layout2);
@@ -179,7 +176,7 @@ public class PlaylistWindow extends JFrame implements ActionListener {
 								if ((plik != null) && (plik.length() > 0)) {
 									String filePath = katalog + fileSeparator + plik;
 									playlist.addSong(new Song(utwor1, wykonawca1, rok1str, filePath));
-									wypelnijPanel();
+									fillWindow();
 								}
 
 							} catch (Exception e) {
@@ -290,6 +287,6 @@ public class PlaylistWindow extends JFrame implements ActionListener {
 			}
 			i++;
 		}
-		wypelnijPanel();
+		fillWindow();
 	}
 }
