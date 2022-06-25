@@ -41,7 +41,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>Runner</mainClass>
+                            <mainClass>pl.marcinm312.Runner</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>
