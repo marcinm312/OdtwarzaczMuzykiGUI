@@ -14,6 +14,7 @@ public class Playlist {
 	private final String fileSeparator = FileSystems.getDefault().getSeparator();
 
 	public Playlist(String name) throws ValidationException {
+
 		if (name == null || name.isEmpty()) {
 			throw new ValidationException("Nazwa playlisty nie może być pusta!");
 		}
@@ -37,6 +38,7 @@ public class Playlist {
 	}
 
 	public void savePlaylistToFile(String fileDirectory, String fileName) throws IOException {
+
 		try (FileWriter fileWriter = new FileWriter(fileName + fileSeparator + fileDirectory)) {
 			for (Song song : songsList) {
 				fileWriter.write(song.toString());

@@ -47,13 +47,16 @@ public class MainWindow extends JFrame implements ActionListener {
 	}
 
 	private void fillWindow() {
+
 		jPanel.removeAll();
 		GridLayout layout = new GridLayout(playlistList.size() + 1, 4);
 		jPanel.setLayout(layout);
 		playlistShowButtons = new ArrayList<>();
 		playlistRemoveButtons = new ArrayList<>();
 		playlistSaveButtons = new ArrayList<>();
+
 		for (Playlist playlist : playlistList) {
+
 			JLabel labelWithName = new JLabel();
 			jPanel.add(labelWithName);
 			labelWithName.setText(playlist.getName());
@@ -73,6 +76,7 @@ public class MainWindow extends JFrame implements ActionListener {
 			jPanel.add(playlistSaveButton);
 			playlistSaveButton.addActionListener(this);
 		}
+
 		addPlaylistButton = new JButton("Utwórz nową playlistę");
 		jPanel.add(addPlaylistButton);
 		addPlaylistButton.addActionListener(this);
@@ -93,6 +97,7 @@ public class MainWindow extends JFrame implements ActionListener {
 	}
 
 	public void actionPerformed(ActionEvent actionEvent) {
+
 		Object eventSource = actionEvent.getSource();
 
 		if (eventSource == addPlaylistButton) {
