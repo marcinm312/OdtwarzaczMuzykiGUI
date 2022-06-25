@@ -1,4 +1,4 @@
-package pl.marcinm312;
+package pl.marcinm312.exception;
 
 public class ValidationException extends RuntimeException {
 

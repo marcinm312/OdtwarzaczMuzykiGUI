@@ -1,4 +1,4 @@
-package pl.marcinm312;
+package pl.marcinm312.utils;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -6,6 +6,7 @@ import java.nio.file.Files;
 import java.util.List;
 
 import javazoom.jl.player.Player;
+import pl.marcinm312.model.Song;
 
 import javax.swing.*;
 

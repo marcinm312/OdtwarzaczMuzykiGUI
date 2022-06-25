@@ -1,4 +1,6 @@
-package pl.marcinm312;
+package pl.marcinm312.model;
+
+import pl.marcinm312.exception.ValidationException;
 
 import java.io.File;
 import java.util.Objects;

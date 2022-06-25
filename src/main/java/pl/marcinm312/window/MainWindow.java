@@ -1,4 +1,7 @@
-package pl.marcinm312;
+package pl.marcinm312.window;
+
+import pl.marcinm312.model.Playlist;
+import pl.marcinm312.model.Song;
 
 import java.awt.FileDialog;
 import java.awt.GridLayout;

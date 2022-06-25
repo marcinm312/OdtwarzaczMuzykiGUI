@@ -1,4 +1,8 @@
-package pl.marcinm312;
+package pl.marcinm312.window;
+
+import pl.marcinm312.utils.FilesPlayer;
+import pl.marcinm312.model.Playlist;
+import pl.marcinm312.model.Song;
 
 import java.awt.Color;
 import java.awt.FileDialog;

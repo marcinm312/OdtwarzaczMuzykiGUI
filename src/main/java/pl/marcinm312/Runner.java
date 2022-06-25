@@ -1,5 +1,7 @@
 package pl.marcinm312;
 
+import pl.marcinm312.window.MainWindow;
+
 import javax.swing.JFrame;
 
 public class Runner {
