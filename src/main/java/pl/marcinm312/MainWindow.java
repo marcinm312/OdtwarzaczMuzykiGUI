@@ -7,6 +7,7 @@ import java.awt.event.ActionListener;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.nio.file.FileSystems;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,6 +29,7 @@ public class MainWindow extends JFrame implements ActionListener {
 	private JButton addPlaylistButton;
 	private JButton loadPlaylistButton;
 	private JButton showAboutButton;
+	private final String fileSeparator = FileSystems.getDefault().getSeparator();
 
 	public MainWindow() {
 		try {
@@ -122,7 +124,7 @@ public class MainWindow extends JFrame implements ActionListener {
 			String directory = fdwczytaj.getDirectory();
 			String file = fdwczytaj.getFile();
 			try {
-				FileReader fr = new FileReader(directory + "\\" + file);
+				FileReader fr = new FileReader(directory + fileSeparator + file);
 				BufferedReader bfr = new BufferedReader(fr);
 				String nazwapl = JOptionPane.showInputDialog(null, "Nazwa nowo wczytanej playlisty", "Nowa playlista",
 						JOptionPane.WARNING_MESSAGE);

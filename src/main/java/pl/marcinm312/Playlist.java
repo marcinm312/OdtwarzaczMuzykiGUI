@@ -2,6 +2,7 @@ package pl.marcinm312;
 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.FileSystems;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -10,10 +11,11 @@ public class Playlist {
 
 	private final String name;
 	private final List<Song> songsList = new ArrayList<>();
+	private final String fileSeparator = FileSystems.getDefault().getSeparator();
 
-	public Playlist(String name) throws Exception {
+	public Playlist(String name) throws ValidationException {
 		if (name == null || name.isEmpty()) {
-			throw new Exception("Nazwa playlisty nie może być pusta!");
+			throw new ValidationException("Nazwa playlisty nie może być pusta!");
 		}
 		this.name = name;
 	}
@@ -35,12 +37,12 @@ public class Playlist {
 	}
 
 	public void savePlaylistToFile(String fileDirectory, String fileName) throws IOException {
-		FileWriter plik2 = new FileWriter(fileName + "\\" + fileDirectory);
-		for (Song song : songsList) {
-			plik2.write(song.toString());
-			plik2.write("\n");
+		try (FileWriter fileWriter = new FileWriter(fileName + fileSeparator + fileDirectory)) {
+			for (Song song : songsList) {
+				fileWriter.write(song.toString());
+				fileWriter.write("\n");
+			}
 		}
-		plik2.close();
 	}
 
 	public List<Song> getSongsList() {

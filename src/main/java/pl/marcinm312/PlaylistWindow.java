@@ -5,6 +5,7 @@ import java.awt.FileDialog;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.nio.file.FileSystems;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -31,6 +32,7 @@ public class PlaylistWindow extends JFrame implements ActionListener {
 	private List<JButton> removeSongButtonsList;
 	private List<JButton> playSongButtons;
 	private transient FilesPlayer filesPlayer;
+	private final String fileSeparator = FileSystems.getDefault().getSeparator();
 
 	public PlaylistWindow(Playlist lista2) {
 		this.playlist = lista2;
@@ -175,7 +177,7 @@ public class PlaylistWindow extends JFrame implements ActionListener {
 								String katalog = fdwczytaj.getDirectory();
 								String plik = fdwczytaj.getFile();
 								if ((plik != null) && (plik.length() > 0)) {
-									String filePath = katalog + "\\" + plik;
+									String filePath = katalog + fileSeparator + plik;
 									playlist.addSong(new Song(utwor1, wykonawca1, rok1str, filePath));
 									wypelnijPanel();
 								}
