@@ -3,6 +3,7 @@ package pl.marcinm312.window;
 import pl.marcinm312.utils.FilesPlayer;
 import pl.marcinm312.model.Playlist;
 import pl.marcinm312.model.Song;
+import pl.marcinm312.utils.UIUtils;
 
 import java.awt.Color;
 import java.awt.FileDialog;
@@ -11,7 +12,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.nio.file.FileSystems;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -30,6 +30,7 @@ public class PlaylistWindow extends JFrame implements ActionListener {
 	private JButton sortButton;
 	private JButton playAllButton;
 	private JButton stopButton;
+	private JButton refreshButton;
 	private List<JButton> moveButtons;
 	private List<JButton> copyButtons;
 	private List<JButton> removeButtons;
@@ -120,7 +121,7 @@ public class PlaylistWindow extends JFrame implements ActionListener {
 		jPanel.add(sortButton);
 		sortButton.addActionListener(this);
 
-		JButton refreshButton = new JButton("Odśwież playlistę");
+		refreshButton = new JButton("Odśwież playlistę");
 		jPanel.add(refreshButton);
 		refreshButton.addActionListener(this);
 
@@ -144,124 +145,146 @@ public class PlaylistWindow extends JFrame implements ActionListener {
 		}
 	}
 
+	@Override
 	public void actionPerformed(ActionEvent actionEvent) {
 
 		Object eventSource = actionEvent.getSource();
 
 		if (eventSource == addSongButton) {
-			String title = JOptionPane.showInputDialog(null, "Tytuł utworu:", NEW_SONG,
-					JOptionPane.WARNING_MESSAGE);
-			String performer = JOptionPane.showInputDialog(null, "Wykonawca utworu:", NEW_SONG,
-					JOptionPane.WARNING_MESSAGE);
-			String year = JOptionPane.showInputDialog(null, "Rok wydania utworu:", NEW_SONG,
-					JOptionPane.WARNING_MESSAGE);
-
-			JOptionPane.showMessageDialog(null, "Obsługiwane są tylko pliki MP3.");
-			FileDialog songLoadFileDialog = new FileDialog(this, "Wczytaj", FileDialog.LOAD);
-			songLoadFileDialog.setFilenameFilter((dir, name) -> name.toLowerCase().endsWith(".mp3"));
-			songLoadFileDialog.setVisible(true);
-			String directory = songLoadFileDialog.getDirectory();
-			String file = songLoadFileDialog.getFile();
-			String filePath = directory + fileSeparator + file;
-			try {
-				playlist.addSong(new Song(title, performer, year, filePath));
-			} catch (Exception e) {
-				JOptionPane.showMessageDialog(null, "Wystąpił błąd podczas dodawania utworu: " + e.getMessage());
-				return;
-			}
-			fillWindow();
+			addSongButtonAction();
+			return;
 		}
-
 		if (eventSource == sortButton) {
-			playlist.sortPlaylist();
+			sortButtonAction();
+			return;
 		}
-
 		if (eventSource == stopButton) {
 			stopFilesPlayer();
+			return;
 		}
-
 		if (eventSource == playAllButton) {
-			try {
-				startFilesPlayer(playlist.getSongsList());
-			} catch (Exception e) {
-				JOptionPane.showMessageDialog(null, "Wystąpił błąd podczas odtwarzania listy: " + e.getMessage());
-				return;
-			}
+			playAllButtonAction();
+			return;
 		}
-
-		List<Playlist> playlistList;
+		if (eventSource == refreshButton) {
+			refreshButtonAction();
+			return;
+		}
 
 		int i = 0;
 		while (i < moveButtons.size()) {
 			if (eventSource == moveButtons.get(i)) {
-				playlistList = MainWindow.getPlaylistList();
-				List<String> playlistNamesList = new ArrayList<>();
-				for (Playlist playlistItem : playlistList) {
-					playlistNamesList.add(playlistItem.getName());
-				}
-				String[] playlistNamesArray = playlistNamesList.toArray(new String[0]);
-				String choosePlaylistInput = (String) JOptionPane.showInputDialog(null,
-						"Wybierz playlistę, do której chcesz przenieść utwór:", "Wybór playlisty",
-						JOptionPane.QUESTION_MESSAGE, null, playlistNamesArray, playlistNamesArray[0]);
-				if ((choosePlaylistInput != null) && (choosePlaylistInput.length() > 0)) {
-					List<String> namesList = Arrays.asList(playlistNamesArray);
-					int nameIndex = namesList.indexOf(choosePlaylistInput);
-					Song song = playlist.getSongsList().get(i);
-					playlistList.get(nameIndex).addSong(song);
-					playlist.removeSong(i);
-				}
-				break;
+				moveButtonAction(i);
+				return;
 			}
-			i++;
-		}
-
-		i = 0;
-		while (i < copyButtons.size()) {
 			if (eventSource == copyButtons.get(i)) {
-				playlistList = MainWindow.getPlaylistList();
-				List<String> playlistNamesList = new ArrayList<>();
-				for (Playlist playlistItem : playlistList) {
-					playlistNamesList.add(playlistItem.getName());
-				}
-				String[] playlistNamesArray = playlistNamesList.toArray(new String[0]);
-				String choosePlaylistInput = (String) JOptionPane.showInputDialog(null,
-						"Wybierz playlistę, do której chcesz skopiować utwór:", "Wybór playlisty",
-						JOptionPane.QUESTION_MESSAGE, null, playlistNamesArray, playlistNamesArray[0]);
-				if ((choosePlaylistInput != null) && (choosePlaylistInput.length() > 0)) {
-					List<String> namesList = Arrays.asList(playlistNamesArray);
-					int nameIndex = namesList.indexOf(choosePlaylistInput);
-					Song song = playlist.getSongsList().get(i);
-					playlistList.get(nameIndex).addSong(song);
-				}
-				break;
+				copyButtonAction(i);
+				return;
 			}
-			i++;
-		}
-
-		i = 0;
-		while (i < removeButtons.size()) {
 			if (eventSource == removeButtons.get(i)) {
-				playlist.removeSong(i);
-				break;
+				removeSongFromPlaylist(i);
+				fillWindow();
+				return;
+			}
+			if (eventSource == playSongButtons.get(i)) {
+				playSongButtonAction(i);
+				return;
 			}
 			i++;
 		}
+	}
 
-		i = 0;
-		while (i < playSongButtons.size()) {
-			if (eventSource == playSongButtons.get(i)) {
-				Song song = playlist.getSongsList().get(i);
-				try {
-					List<Song> singletonSongList = Collections.singletonList(song);
-					startFilesPlayer(singletonSongList);
-				} catch (Exception e) {
-					JOptionPane.showMessageDialog(null, "Wystąpił błąd podczas odtwarzania utworu:\n"
-							+ song.toString() + "\n"
-							+ e.getMessage());
-				}
-				break;
-			}
-			i++;
+	private void playSongButtonAction(int i) {
+		Song song = playlist.getSongsList().get(i);
+		try {
+			List<Song> singletonSongList = Collections.singletonList(song);
+			startFilesPlayer(singletonSongList);
+		} catch (Exception e) {
+			UIUtils.showMessageDialog("Wystąpił błąd podczas odtwarzania utworu:\n"
+					+ song.toString() + "\n"
+					+ e.getMessage());
+		}
+	}
+
+	private void removeSongFromPlaylist(int i) {
+		playlist.removeSong(i);
+	}
+
+	private void copyButtonAction(int i) {
+		List<Playlist> playlistList = MainWindow.getPlaylistList();
+		List<String> playlistNamesList = getPlaylistNamesList(playlistList);
+		String[] playlistNamesArray = playlistNamesList.toArray(new String[0]);
+		String choosePlaylistInput = (String) JOptionPane.showInputDialog(null,
+				"Wybierz playlistę, do której chcesz skopiować utwór:", "Wybór playlisty",
+				JOptionPane.QUESTION_MESSAGE, null, playlistNamesArray, playlistNamesArray[0]);
+		if ((choosePlaylistInput != null) && (choosePlaylistInput.length() > 0)) {
+			int nameIndex = playlistNamesList.indexOf(choosePlaylistInput);
+			Song song = playlist.getSongsList().get(i);
+			playlistList.get(nameIndex).addSong(song);
+		}
+		fillWindow();
+	}
+
+	private void moveButtonAction(int i) {
+		List<Playlist> playlistList = MainWindow.getPlaylistList();
+		List<String> playlistNamesList = getPlaylistNamesList(playlistList);
+		String[] playlistNamesArray = playlistNamesList.toArray(new String[0]);
+		String choosePlaylistInput = (String) JOptionPane.showInputDialog(null,
+				"Wybierz playlistę, do której chcesz przenieść utwór:", "Wybór playlisty",
+				JOptionPane.QUESTION_MESSAGE, null, playlistNamesArray, playlistNamesArray[0]);
+		if ((choosePlaylistInput != null) && (choosePlaylistInput.length() > 0)) {
+			int nameIndex = playlistNamesList.indexOf(choosePlaylistInput);
+			Song song = playlist.getSongsList().get(i);
+			playlistList.get(nameIndex).addSong(song);
+			removeSongFromPlaylist(i);
+		}
+		fillWindow();
+	}
+
+	private List<String> getPlaylistNamesList(List<Playlist> playlistList) {
+		List<String> playlistNamesList = new ArrayList<>();
+		for (Playlist playlistItem : playlistList) {
+			playlistNamesList.add(playlistItem.getName());
+		}
+		return playlistNamesList;
+	}
+
+	private void refreshButtonAction() {
+		fillWindow();
+	}
+
+	private void playAllButtonAction() {
+		try {
+			startFilesPlayer(playlist.getSongsList());
+		} catch (Exception e) {
+			UIUtils.showMessageDialog("Wystąpił błąd podczas odtwarzania listy: " + e.getMessage());
+		}
+	}
+
+	private void sortButtonAction() {
+		playlist.sortPlaylist();
+		fillWindow();
+	}
+
+	private void addSongButtonAction() {
+		String title = JOptionPane.showInputDialog(null, "Tytuł utworu:", NEW_SONG,
+				JOptionPane.WARNING_MESSAGE);
+		String performer = JOptionPane.showInputDialog(null, "Wykonawca utworu:", NEW_SONG,
+				JOptionPane.WARNING_MESSAGE);
+		String year = JOptionPane.showInputDialog(null, "Rok wydania utworu:", NEW_SONG,
+				JOptionPane.WARNING_MESSAGE);
+
+		UIUtils.showMessageDialog("Obsługiwane są tylko pliki MP3.");
+		FileDialog songLoadFileDialog = new FileDialog(this, "Wczytaj", FileDialog.LOAD);
+		songLoadFileDialog.setFilenameFilter((dir, name) -> name.toLowerCase().endsWith(".mp3"));
+		songLoadFileDialog.setVisible(true);
+		String directory = songLoadFileDialog.getDirectory();
+		String file = songLoadFileDialog.getFile();
+		String filePath = directory + fileSeparator + file;
+		try {
+			playlist.addSong(new Song(title, performer, year, filePath));
+		} catch (Exception e) {
+			UIUtils.showMessageDialog("Wystąpił błąd podczas dodawania utworu: " + e.getMessage());
 		}
 		fillWindow();
 	}

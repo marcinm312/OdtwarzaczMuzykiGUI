@@ -3,6 +3,7 @@ package pl.marcinm312.window;
 import pl.marcinm312.model.Playlist;
 import pl.marcinm312.model.Song;
 import pl.marcinm312.utils.FilesPlayer;
+import pl.marcinm312.utils.UIUtils;
 
 import java.awt.FileDialog;
 import java.awt.GridLayout;
@@ -34,6 +35,7 @@ public class MainWindow extends JFrame implements ActionListener {
 	private JButton showAboutButton;
 	private final String fileSeparator = FileSystems.getDefault().getSeparator();
 	private static FilesPlayer filesPlayer;
+	private static final String APPLICATION_NAME = "Odtwarzacz 5.0";
 
 	public MainWindow() {
 		try {
@@ -41,7 +43,7 @@ public class MainWindow extends JFrame implements ActionListener {
 		} catch (Exception e) {
 			//Default look and feel
 		}
-		setTitle("Odtwarzacz 4.4");
+		setTitle(APPLICATION_NAME);
 		jPanel = new JPanel();
 		add(jPanel);
 		fillWindow();
@@ -101,120 +103,133 @@ public class MainWindow extends JFrame implements ActionListener {
 		pack();
 	}
 
+	@Override
 	public void actionPerformed(ActionEvent actionEvent) {
 
 		Object eventSource = actionEvent.getSource();
 
 		if (eventSource == addPlaylistButton) {
-			String playlistName = JOptionPane.showInputDialog(null, "Nazwa nowej playlisty:", "Nowa playlista",
-					JOptionPane.WARNING_MESSAGE);
-			try {
-				Playlist playlist = new Playlist(playlistName);
-				if (playlistList.contains(playlist)) {
-					JOptionPane.showMessageDialog(null, "Playlista o takiej nazwie już istnieje!");
-				} else {
-					playlistList.add(playlist);
-					fillWindow();
-				}
-			} catch (Exception e) {
-				JOptionPane.showMessageDialog(null, "Wystąpił błąd: " + e.getMessage());
-			}
+			addPlaylistButtonAction();
+			return;
 		}
-
 		if (eventSource == showAboutButton) {
-			JOptionPane.showMessageDialog(null, "Odtwarzacz 4.4\n\nCopyright (C) 2022\nMarcin Michalczyk");
+			UIUtils.showMessageDialog(APPLICATION_NAME + "\n\nCopyright (C) 2022\nMarcin Michalczyk");
+			return;
 		}
-
 		if (eventSource == loadPlaylistButton) {
-			FileDialog loadPlaylistFileDialog = new FileDialog(this, "Wczytaj", FileDialog.LOAD);
-			loadPlaylistFileDialog.setFilenameFilter((dir, name) -> name.toLowerCase().endsWith(".txt"));
-			loadPlaylistFileDialog.setMultipleMode(false);
-			loadPlaylistFileDialog.setVisible(true);
-			String directory = loadPlaylistFileDialog.getDirectory();
-			String file = loadPlaylistFileDialog.getFile();
-			if (file.toLowerCase().endsWith(".txt")) {
-				try (FileReader fr = new FileReader(directory + fileSeparator + file)) {
-					BufferedReader bfr = new BufferedReader(fr);
-					String playlistName = JOptionPane.showInputDialog(null, "Nazwa nowo wczytanej playlisty", "Nowa playlista",
-							JOptionPane.WARNING_MESSAGE);
-					try {
-						Playlist playlist = new Playlist(playlistName);
-						if (playlistList.contains(playlist)) {
-							JOptionPane.showMessageDialog(null, "Playlista o takiej nazwie już istnieje!");
-						} else {
-							playlistList.add(playlist);
-							String line;
-							while ((line = bfr.readLine()) != null) {
-								String[] details;
-								details = line.split(";");
-								try {
-									playlist.addSong(new Song(details[0], details[1], details[2], details[3]));
-								} catch (Exception e) {
-									JOptionPane.showMessageDialog(null,
-											"Wystąpił błąd podczas dodawania utworu:\n"
-													+ line + "\n"
-													+ e.getMessage());
-									break;
-								}
-							}
-						}
-						bfr.close();
-					} catch (Exception e) {
-						JOptionPane.showMessageDialog(null,
-								"Wystąpił błąd podczas tworzenia playlisty: " + e.getMessage());
-						return;
-					}
-					fillWindow();
-				} catch (Exception e) {
-					JOptionPane.showMessageDialog(null, "Wystąpił błąd podczas wczytywania pliku: " + e.getMessage());
-					return;
-				}
-			} else {
-				JOptionPane.showMessageDialog(null, "Wczytywany plik musi mieć format *.txt lub *.TXT.");
-				return;
-			}
+			loadPlaylistButtonAction();
+			return;
 		}
 
 		int i = 0;
 		while (i < playlistShowButtons.size()) {
 			if (eventSource == playlistShowButtons.get(i)) {
-				Playlist playlist = playlistList.get(i);
-				PlaylistWindow playlistWindow = new PlaylistWindow(playlist);
-				playlistWindow.setVisible(true);
-				break;
+				playlistShowButtonAction(i);
+				return;
 			}
-			i++;
-		}
-
-		i = 0;
-		while (i < playlistRemoveButtons.size()) {
 			if (eventSource == playlistRemoveButtons.get(i)) {
-				playlistList.remove(i);
-				break;
+				playlistRemoveButtonAction(i);
+				return;
 			}
-			i++;
-		}
-
-		i = 0;
-		while (i < playlistSaveButtons.size()) {
 			if (eventSource == playlistSaveButtons.get(i)) {
-				JOptionPane.showMessageDialog(null, "Pamiętaj dodać rozszerzenie *.txt do zapisywanego pliku!");
-				try {
-					FileDialog savePlaylistFileDialog = new FileDialog(this, "Zapisz", FileDialog.SAVE);
-					savePlaylistFileDialog.setFilenameFilter((dir, name) -> name.endsWith(".txt") || name.endsWith(".TXT"));
-					savePlaylistFileDialog.setVisible(true);
-					String directory = savePlaylistFileDialog.getDirectory();
-					String file = savePlaylistFileDialog.getFile();
-					playlistList.get(i).savePlaylistToFile(file, directory);
-				} catch (IOException e) {
-					JOptionPane.showMessageDialog(null,
-							"Wystąpił nieoczekiwany błąd zapisu. Upewnij się, czy zapisywany plik ma format *.txt lub *.TXT.");
-				}
-				break;
+				playlistSaveButtonAction(i);
+				return;
 			}
 			i++;
 		}
-		fillWindow();
+	}
+
+	private void playlistSaveButtonAction(int i) {
+		UIUtils.showMessageDialog("Pamiętaj dodać rozszerzenie *.txt do zapisywanego pliku!");
+		try {
+			FileDialog savePlaylistFileDialog = new FileDialog(this, "Zapisz", FileDialog.SAVE);
+			savePlaylistFileDialog.setFilenameFilter((dir, name) -> name.endsWith(".txt") || name.endsWith(".TXT"));
+			savePlaylistFileDialog.setVisible(true);
+			String directory = savePlaylistFileDialog.getDirectory();
+			String file = savePlaylistFileDialog.getFile();
+			playlistList.get(i).savePlaylistToFile(file, directory);
+		} catch (IOException e) {
+			UIUtils.showMessageDialog("Wystąpił nieoczekiwany błąd zapisu. Upewnij się, czy zapisywany plik ma format *.txt lub *.TXT.");
+		}
+	}
+
+	private void playlistRemoveButtonAction(int i) {
+		playlistList.remove(i);
+	}
+
+	private void playlistShowButtonAction(int i) {
+		Playlist playlist = playlistList.get(i);
+		PlaylistWindow playlistWindow = new PlaylistWindow(playlist);
+		playlistWindow.setVisible(true);
+	}
+
+	private void loadPlaylistButtonAction() {
+		FileDialog loadPlaylistFileDialog = new FileDialog(this, "Wczytaj", FileDialog.LOAD);
+		loadPlaylistFileDialog.setFilenameFilter((dir, name) -> name.toLowerCase().endsWith(".txt"));
+		loadPlaylistFileDialog.setMultipleMode(false);
+		loadPlaylistFileDialog.setVisible(true);
+		String directory = loadPlaylistFileDialog.getDirectory();
+		String file = loadPlaylistFileDialog.getFile();
+		if (file.toLowerCase().endsWith(".txt")) {
+			try (FileReader fr = new FileReader(directory + fileSeparator + file)) {
+				createNewPlaylistFromFile(fr);
+			} catch (Exception e) {
+				UIUtils.showMessageDialog("Wystąpił błąd podczas wczytywania pliku: " + e.getMessage());
+			}
+		} else {
+			UIUtils.showMessageDialog("Wczytywany plik musi mieć format *.txt lub *.TXT.");
+		}
+	}
+
+	private void createNewPlaylistFromFile(FileReader fr) {
+		BufferedReader bfr = new BufferedReader(fr);
+		String playlistName = JOptionPane.showInputDialog(null, "Nazwa nowo wczytanej playlisty", "Nowa playlista",
+				JOptionPane.WARNING_MESSAGE);
+		try {
+			Playlist playlist = new Playlist(playlistName);
+			if (playlistList.contains(playlist)) {
+				UIUtils.showMessageDialog("Playlista o takiej nazwie już istnieje!");
+			} else {
+				playlistList.add(playlist);
+				readPlaylistFromFile(bfr, playlist);
+				fillWindow();
+			}
+			bfr.close();
+		} catch (Exception e) {
+			UIUtils.showMessageDialog("Wystąpił błąd podczas tworzenia playlisty: " + e.getMessage());
+		}
+	}
+
+	private void readPlaylistFromFile(BufferedReader bfr, Playlist playlist) throws IOException {
+		String line;
+		while ((line = bfr.readLine()) != null) {
+			String[] details;
+			details = line.split(";");
+			try {
+				playlist.addSong(new Song(details[0], details[1], details[2], details[3]));
+			} catch (Exception e) {
+				UIUtils.showMessageDialog("Wystąpił błąd podczas dodawania utworu:\n"
+						+ line + "\n"
+						+ e.getMessage());
+				break;
+			}
+		}
+	}
+
+	private void addPlaylistButtonAction() {
+		String playlistName = JOptionPane.showInputDialog(null, "Nazwa nowej playlisty:", "Nowa playlista",
+				JOptionPane.WARNING_MESSAGE);
+		try {
+			Playlist playlist = new Playlist(playlistName);
+			if (playlistList.contains(playlist)) {
+				UIUtils.showMessageDialog("Playlista o takiej nazwie już istnieje!");
+			} else {
+				playlistList.add(playlist);
+				fillWindow();
+			}
+		} catch (Exception e) {
+			UIUtils.showMessageDialog("Wystąpił błąd: " + e.getMessage());
+		}
 	}
 
 	public static FilesPlayer getFilesPlayer() {
