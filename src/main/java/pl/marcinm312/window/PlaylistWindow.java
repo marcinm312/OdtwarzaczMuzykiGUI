@@ -34,7 +34,6 @@ public class PlaylistWindow extends JFrame implements ActionListener {
 	private List<JButton> copyButtons;
 	private List<JButton> removeButtons;
 	private List<JButton> playSongButtons;
-	private transient FilesPlayer filesPlayer;
 	private final String fileSeparator = FileSystems.getDefault().getSeparator();
 	private static final String NEW_SONG = "Nowy utwór";
 
@@ -145,7 +144,6 @@ public class PlaylistWindow extends JFrame implements ActionListener {
 		}
 	}
 
-	@SuppressWarnings("deprecation")
 	public void actionPerformed(ActionEvent actionEvent) {
 
 		Object eventSource = actionEvent.getSource();
@@ -179,13 +177,12 @@ public class PlaylistWindow extends JFrame implements ActionListener {
 		}
 
 		if (eventSource == stopButton) {
-			filesPlayer.stop();
+			stopFilesPlayer();
 		}
 
 		if (eventSource == playAllButton) {
 			try {
-				filesPlayer = new FilesPlayer(playlist.getSongsList());
-				filesPlayer.start();
+				startFilesPlayer(playlist.getSongsList());
 			} catch (Exception e) {
 				JOptionPane.showMessageDialog(null, "Wystąpił błąd podczas odtwarzania listy: " + e.getMessage());
 				return;
@@ -256,8 +253,7 @@ public class PlaylistWindow extends JFrame implements ActionListener {
 				Song song = playlist.getSongsList().get(i);
 				try {
 					List<Song> singletonSongList = Collections.singletonList(song);
-					filesPlayer = new FilesPlayer(singletonSongList);
-					filesPlayer.start();
+					startFilesPlayer(singletonSongList);
 				} catch (Exception e) {
 					JOptionPane.showMessageDialog(null, "Wystąpił błąd podczas odtwarzania utworu:\n"
 							+ song.toString() + "\n"
@@ -268,5 +264,17 @@ public class PlaylistWindow extends JFrame implements ActionListener {
 			i++;
 		}
 		fillWindow();
+	}
+
+	private void stopFilesPlayer() {
+		if (MainWindow.getFilesPlayer() != null && MainWindow.getFilesPlayer().isAlive()) {
+			MainWindow.getFilesPlayer().stopPlayer();
+		}
+	}
+
+	private void startFilesPlayer(List<Song> songList) {
+		stopFilesPlayer();
+		MainWindow.setFilesPlayer(new FilesPlayer(songList));
+		MainWindow.getFilesPlayer().start();
 	}
 }

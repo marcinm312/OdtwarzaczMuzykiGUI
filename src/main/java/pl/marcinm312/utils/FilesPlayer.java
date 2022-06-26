@@ -13,6 +13,8 @@ import javax.swing.*;
 public class FilesPlayer extends Thread {
 
 	private final List<Song> songsList;
+	private Player player;
+	private boolean isClosed = false;
 
 	public FilesPlayer(List<Song> songsList) {
 		this.songsList = songsList;
@@ -24,15 +26,23 @@ public class FilesPlayer extends Thread {
 		for (Song songItem : songsList) {
 			File file = songItem.getFile();
 			try {
+				if (isClosed) {
+					break;
+				}
 				BufferedInputStream bis = new BufferedInputStream(Files.newInputStream(file.toPath()));
-				Player player = new Player(bis);
+				player = new Player(bis);
 				player.play();
 			} catch (Exception e) {
 				JOptionPane.showMessageDialog(null, "Błąd podczas odtwarzania pliku:\n"
 						+ file.getAbsolutePath() + "\n"
 						+ e.getMessage());
-				break;
+				isClosed = true;
 			}
 		}
+	}
+
+	public void stopPlayer() {
+		player.close();
+		isClosed = true;
 	}
 }

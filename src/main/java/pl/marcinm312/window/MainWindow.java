@@ -2,6 +2,7 @@ package pl.marcinm312.window;
 
 import pl.marcinm312.model.Playlist;
 import pl.marcinm312.model.Song;
+import pl.marcinm312.utils.FilesPlayer;
 
 import java.awt.FileDialog;
 import java.awt.GridLayout;
@@ -32,6 +33,7 @@ public class MainWindow extends JFrame implements ActionListener {
 	private JButton loadPlaylistButton;
 	private JButton showAboutButton;
 	private final String fileSeparator = FileSystems.getDefault().getSeparator();
+	private static FilesPlayer filesPlayer;
 
 	public MainWindow() {
 		try {
@@ -213,5 +215,13 @@ public class MainWindow extends JFrame implements ActionListener {
 			i++;
 		}
 		fillWindow();
+	}
+
+	public static FilesPlayer getFilesPlayer() {
+		return filesPlayer;
+	}
+
+	public static void setFilesPlayer(FilesPlayer filesPlayer) {
+		MainWindow.filesPlayer = filesPlayer;
 	}
 }
