@@ -6,21 +6,17 @@ import pl.marcinm312.model.Song;
 import pl.marcinm312.utils.UIUtils;
 
 import java.awt.Color;
-import java.awt.FileDialog;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.nio.file.FileSystems;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.UIManager;
+import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.filechooser.FileSystemView;
 
 public class PlaylistWindow extends JFrame implements ActionListener {
 
@@ -35,7 +31,6 @@ public class PlaylistWindow extends JFrame implements ActionListener {
 	private List<JButton> copyButtons;
 	private List<JButton> removeButtons;
 	private List<JButton> playSongButtons;
-	private final String fileSeparator = FileSystems.getDefault().getSeparator();
 	private static final String NEW_SONG = "Nowy utwór";
 
 	public PlaylistWindow(Playlist playlist) {
@@ -274,15 +269,16 @@ public class PlaylistWindow extends JFrame implements ActionListener {
 		String year = JOptionPane.showInputDialog(null, "Rok wydania utworu:", NEW_SONG,
 				JOptionPane.WARNING_MESSAGE);
 
-		UIUtils.showMessageDialog("Obsługiwane są tylko pliki MP3.");
-		FileDialog songLoadFileDialog = new FileDialog(this, "Wczytaj", FileDialog.LOAD);
-		songLoadFileDialog.setFilenameFilter((dir, name) -> name.toLowerCase().endsWith(".mp3"));
-		songLoadFileDialog.setVisible(true);
-		String directory = songLoadFileDialog.getDirectory();
-		String file = songLoadFileDialog.getFile();
-		String filePath = directory + fileSeparator + file;
+		JFileChooser jFileChooser = new JFileChooser(FileSystemView.getFileSystemView());
+		jFileChooser.setAcceptAllFileFilterUsed(false);
+		FileNameExtensionFilter extensionFilter = new FileNameExtensionFilter("Pliki MP3", "mp3");
+		jFileChooser.addChoosableFileFilter(extensionFilter);
+		jFileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+		jFileChooser.setMultiSelectionEnabled(false);
+		jFileChooser.showOpenDialog(this);
+		File file = jFileChooser.getSelectedFile();
 		try {
-			playlist.addSong(new Song(title, performer, year, filePath));
+			playlist.addSong(new Song(title, performer, year, file));
 		} catch (Exception e) {
 			UIUtils.showMessageDialog("Wystąpił błąd podczas dodawania utworu: " + e.getMessage());
 		}

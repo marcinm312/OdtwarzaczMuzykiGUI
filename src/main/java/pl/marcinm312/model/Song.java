@@ -7,15 +7,44 @@ import java.util.Objects;
 
 public class Song implements Comparable<Song> {
 
-	private final String title;
-	private final String performer;
-	private final int publicationYear;
-	private final String filePath;
-	private final File file;
+	private String title;
+	private String performer;
+	private int publicationYear;
+	private String filePath;
+	private File file;
 
 
-	public Song(String title, String performer, String publicationYear, String filePath) throws ValidationException {
+	public Song(String title, String performer, String publicationYear, File file) throws ValidationException {
 
+		init(title, performer, publicationYear);
+
+		if (file == null) {
+			throw new ValidationException("Należy wybrać plik MP3!");
+		}
+		this.file = file;
+		this.filePath = file.getPath();
+	}
+
+	public Song(String[] songArray) {
+
+		if (songArray.length < 4) {
+			throw new ValidationException("Wiersz zawiera zbyt mało danych!");
+		}
+		init(songArray[0], songArray[1], songArray[2], songArray[3]);
+	}
+
+	private void init(String title, String performer, String publicationYear, String filePath) throws ValidationException {
+
+		init(title, performer, publicationYear);
+
+		if (filePath == null || filePath.isEmpty()) {
+			throw new ValidationException("Ścieżka do pliku MP3 nie może być pusta!");
+		}
+		this.filePath = filePath;
+		this.file = new File(filePath);
+	}
+
+	private void init(String title, String performer, String publicationYear) throws ValidationException {
 		if (title == null || title.isEmpty()) {
 			throw new ValidationException("Nazwa utworu nie może być pusta!");
 		}
@@ -34,12 +63,6 @@ public class Song implements Comparable<Song> {
 		} catch (Exception e) {
 			throw new ValidationException("Wpisany rok nie jest liczbą!");
 		}
-
-		if (filePath == null || filePath.isEmpty()) {
-			throw new ValidationException("Nazwa pliku MP3 nie może być pusta!");
-		}
-		this.filePath = filePath;
-		this.file = new File(filePath);
 	}
 
 	public String getTitle() {

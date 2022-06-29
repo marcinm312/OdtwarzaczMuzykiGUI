@@ -5,23 +5,19 @@ import pl.marcinm312.model.Song;
 import pl.marcinm312.utils.FilesPlayer;
 import pl.marcinm312.utils.UIUtils;
 
-import java.awt.FileDialog;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.nio.file.FileSystems;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.UIManager;
+import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.filechooser.FileSystemView;
 
 public class MainWindow extends JFrame implements ActionListener {
 
@@ -33,7 +29,6 @@ public class MainWindow extends JFrame implements ActionListener {
 	private JButton addPlaylistButton;
 	private JButton loadPlaylistButton;
 	private JButton showAboutButton;
-	private final String fileSeparator = FileSystems.getDefault().getSeparator();
 	private static FilesPlayer filesPlayer;
 	private static final String APPLICATION_NAME = "Odtwarzacz 5.0";
 
@@ -142,12 +137,15 @@ public class MainWindow extends JFrame implements ActionListener {
 	private void playlistSaveButtonAction(int i) {
 		UIUtils.showMessageDialog("Pamiętaj dodać rozszerzenie *.txt do zapisywanego pliku!");
 		try {
-			FileDialog savePlaylistFileDialog = new FileDialog(this, "Zapisz", FileDialog.SAVE);
-			savePlaylistFileDialog.setFilenameFilter((dir, name) -> name.endsWith(".txt") || name.endsWith(".TXT"));
-			savePlaylistFileDialog.setVisible(true);
-			String directory = savePlaylistFileDialog.getDirectory();
-			String file = savePlaylistFileDialog.getFile();
-			playlistList.get(i).savePlaylistToFile(file, directory);
+			JFileChooser jFileChooser = new JFileChooser(FileSystemView.getFileSystemView());
+			jFileChooser.setAcceptAllFileFilterUsed(false);
+			FileNameExtensionFilter extensionFilter = new FileNameExtensionFilter("Pliki playlist", "txt");
+			jFileChooser.addChoosableFileFilter(extensionFilter);
+			jFileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+			jFileChooser.setMultiSelectionEnabled(false);
+			jFileChooser.showSaveDialog(this);
+			File file = jFileChooser.getSelectedFile();
+			playlistList.get(i).savePlaylistToFile(file);
 		} catch (IOException e) {
 			UIUtils.showMessageDialog("Wystąpił nieoczekiwany błąd zapisu. Upewnij się, czy zapisywany plik ma format *.txt lub *.TXT.");
 		}
@@ -164,14 +162,16 @@ public class MainWindow extends JFrame implements ActionListener {
 	}
 
 	private void loadPlaylistButtonAction() {
-		FileDialog loadPlaylistFileDialog = new FileDialog(this, "Wczytaj", FileDialog.LOAD);
-		loadPlaylistFileDialog.setFilenameFilter((dir, name) -> name.toLowerCase().endsWith(".txt"));
-		loadPlaylistFileDialog.setMultipleMode(false);
-		loadPlaylistFileDialog.setVisible(true);
-		String directory = loadPlaylistFileDialog.getDirectory();
-		String file = loadPlaylistFileDialog.getFile();
-		if (file.toLowerCase().endsWith(".txt")) {
-			try (FileReader fr = new FileReader(directory + fileSeparator + file)) {
+		JFileChooser jFileChooser = new JFileChooser(FileSystemView.getFileSystemView());
+		jFileChooser.setAcceptAllFileFilterUsed(false);
+		FileNameExtensionFilter extensionFilter = new FileNameExtensionFilter("Pliki playlist", "txt");
+		jFileChooser.addChoosableFileFilter(extensionFilter);
+		jFileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+		jFileChooser.setMultiSelectionEnabled(false);
+		jFileChooser.showOpenDialog(this);
+		File file = jFileChooser.getSelectedFile();
+		if (file != null) {
+			try (FileReader fr = new FileReader(file)) {
 				createNewPlaylistFromFile(fr);
 			} catch (Exception e) {
 				UIUtils.showMessageDialog("Wystąpił błąd podczas wczytywania pliku: " + e.getMessage());
@@ -190,9 +190,11 @@ public class MainWindow extends JFrame implements ActionListener {
 			if (playlistList.contains(playlist)) {
 				UIUtils.showMessageDialog("Playlista o takiej nazwie już istnieje!");
 			} else {
-				playlistList.add(playlist);
 				readPlaylistFromFile(bfr, playlist);
-				fillWindow();
+				if (!playlist.getSongsList().isEmpty()) {
+					playlistList.add(playlist);
+					fillWindow();
+				}
 			}
 			bfr.close();
 		} catch (Exception e) {
@@ -203,15 +205,16 @@ public class MainWindow extends JFrame implements ActionListener {
 	private void readPlaylistFromFile(BufferedReader bfr, Playlist playlist) throws IOException {
 		String line;
 		while ((line = bfr.readLine()) != null) {
-			String[] details;
-			details = line.split(";");
+			String[] songArray;
+			songArray = line.split(";");
 			try {
-				playlist.addSong(new Song(details[0], details[1], details[2], details[3]));
+				playlist.addSong(new Song(songArray));
 			} catch (Exception e) {
+				playlist.setSongsList(new ArrayList<>());
 				UIUtils.showMessageDialog("Wystąpił błąd podczas dodawania utworu:\n"
 						+ line + "\n"
 						+ e.getMessage());
-				break;
+				return;
 			}
 		}
 	}

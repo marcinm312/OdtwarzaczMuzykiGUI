@@ -2,9 +2,9 @@ package pl.marcinm312.model;
 
 import pl.marcinm312.exception.ValidationException;
 
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.file.FileSystems;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -12,8 +12,7 @@ import java.util.List;
 public class Playlist {
 
 	private final String name;
-	private final List<Song> songsList = new ArrayList<>();
-	private final String fileSeparator = FileSystems.getDefault().getSeparator();
+	private List<Song> songsList = new ArrayList<>();
 
 	public Playlist(String name) throws ValidationException {
 
@@ -39,9 +38,9 @@ public class Playlist {
 		Collections.sort(songsList);
 	}
 
-	public void savePlaylistToFile(String fileDirectory, String fileName) throws IOException {
+	public void savePlaylistToFile(File file) throws IOException {
 
-		try (FileWriter fileWriter = new FileWriter(fileName + fileSeparator + fileDirectory)) {
+		try (FileWriter fileWriter = new FileWriter(file)) {
 			for (Song song : songsList) {
 				fileWriter.write(song.toString());
 				fileWriter.write("\n");
@@ -51,5 +50,9 @@ public class Playlist {
 
 	public List<Song> getSongsList() {
 		return songsList;
+	}
+
+	public void setSongsList(List<Song> songsList) {
+		this.songsList = songsList;
 	}
 }
