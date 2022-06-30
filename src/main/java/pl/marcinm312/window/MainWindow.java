@@ -16,8 +16,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.*;
-import javax.swing.filechooser.FileNameExtensionFilter;
-import javax.swing.filechooser.FileSystemView;
 
 public class MainWindow extends JFrame implements ActionListener {
 
@@ -137,14 +135,7 @@ public class MainWindow extends JFrame implements ActionListener {
 	private void playlistSaveButtonAction(int i) {
 		UIUtils.showMessageDialog("Pamiętaj dodać rozszerzenie *.txt do zapisywanego pliku!");
 		try {
-			JFileChooser jFileChooser = new JFileChooser(FileSystemView.getFileSystemView());
-			jFileChooser.setAcceptAllFileFilterUsed(false);
-			FileNameExtensionFilter extensionFilter = new FileNameExtensionFilter("Pliki playlist", "txt");
-			jFileChooser.addChoosableFileFilter(extensionFilter);
-			jFileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-			jFileChooser.setMultiSelectionEnabled(false);
-			jFileChooser.showSaveDialog(this);
-			File file = jFileChooser.getSelectedFile();
+			File file = UIUtils.getFileFromFileChooser("Pliki playlist", "txt", true);
 			playlistList.get(i).savePlaylistToFile(file);
 		} catch (IOException e) {
 			UIUtils.showMessageDialog("Wystąpił nieoczekiwany błąd zapisu. Upewnij się, czy zapisywany plik ma format *.txt lub *.TXT.");
@@ -162,14 +153,7 @@ public class MainWindow extends JFrame implements ActionListener {
 	}
 
 	private void loadPlaylistButtonAction() {
-		JFileChooser jFileChooser = new JFileChooser(FileSystemView.getFileSystemView());
-		jFileChooser.setAcceptAllFileFilterUsed(false);
-		FileNameExtensionFilter extensionFilter = new FileNameExtensionFilter("Pliki playlist", "txt");
-		jFileChooser.addChoosableFileFilter(extensionFilter);
-		jFileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-		jFileChooser.setMultiSelectionEnabled(false);
-		jFileChooser.showOpenDialog(this);
-		File file = jFileChooser.getSelectedFile();
+		File file = UIUtils.getFileFromFileChooser("Pliki playlist", "txt", false);
 		if (file != null) {
 			try (FileReader fr = new FileReader(file)) {
 				createNewPlaylistFromFile(fr);

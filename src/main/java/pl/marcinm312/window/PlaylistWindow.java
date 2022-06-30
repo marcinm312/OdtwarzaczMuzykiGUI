@@ -15,8 +15,6 @@ import java.util.Collections;
 import java.util.List;
 
 import javax.swing.*;
-import javax.swing.filechooser.FileNameExtensionFilter;
-import javax.swing.filechooser.FileSystemView;
 
 public class PlaylistWindow extends JFrame implements ActionListener {
 
@@ -269,14 +267,7 @@ public class PlaylistWindow extends JFrame implements ActionListener {
 		String year = JOptionPane.showInputDialog(null, "Rok wydania utworu:", NEW_SONG,
 				JOptionPane.WARNING_MESSAGE);
 
-		JFileChooser jFileChooser = new JFileChooser(FileSystemView.getFileSystemView());
-		jFileChooser.setAcceptAllFileFilterUsed(false);
-		FileNameExtensionFilter extensionFilter = new FileNameExtensionFilter("Pliki MP3", "mp3");
-		jFileChooser.addChoosableFileFilter(extensionFilter);
-		jFileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-		jFileChooser.setMultiSelectionEnabled(false);
-		jFileChooser.showOpenDialog(this);
-		File file = jFileChooser.getSelectedFile();
+		File file = UIUtils.getFileFromFileChooser("Pliki MP3", "mp3", false);
 		try {
 			playlist.addSong(new Song(title, performer, year, file));
 		} catch (Exception e) {
