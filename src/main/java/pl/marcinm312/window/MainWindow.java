@@ -133,10 +133,11 @@ public class MainWindow extends JFrame implements ActionListener {
 	}
 
 	private void playlistSaveButtonAction(int i) {
-		UIUtils.showMessageDialog("Pamiętaj dodać rozszerzenie *.txt do zapisywanego pliku!");
 		try {
 			File file = UIUtils.getFileFromFileChooser("Pliki playlist", "txt", true);
-			playlistList.get(i).savePlaylistToFile(file);
+			if (file != null) {
+				playlistList.get(i).savePlaylistToFile(file);
+			}
 		} catch (IOException e) {
 			UIUtils.showMessageDialog("Wystąpił nieoczekiwany błąd zapisu. Upewnij się, czy zapisywany plik ma format *.txt lub *.TXT.");
 		}
@@ -160,8 +161,6 @@ public class MainWindow extends JFrame implements ActionListener {
 			} catch (Exception e) {
 				UIUtils.showMessageDialog("Wystąpił błąd podczas wczytywania pliku: " + e.getMessage());
 			}
-		} else {
-			UIUtils.showMessageDialog("Wczytywany plik musi mieć format *.txt lub *.TXT.");
 		}
 	}
 

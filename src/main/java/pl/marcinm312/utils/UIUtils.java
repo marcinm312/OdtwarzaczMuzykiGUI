@@ -1,5 +1,7 @@
 package pl.marcinm312.utils;
 
+import org.apache.commons.io.FilenameUtils;
+
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.filechooser.FileSystemView;
@@ -24,9 +26,14 @@ public class UIUtils {
 		jFileChooser.setMultiSelectionEnabled(false);
 		if (isSaveDialog) {
 			jFileChooser.showSaveDialog(null);
+			File file = jFileChooser.getSelectedFile();
+			if (file != null && !FilenameUtils.getExtension(file.getName()).equalsIgnoreCase(filterExtension)) {
+				file = new File(file.getParentFile(), FilenameUtils.getBaseName(file.getName()) + "." + filterExtension);
+			}
+			return file;
 		} else {
 			jFileChooser.showOpenDialog(null);
+			return jFileChooser.getSelectedFile();
 		}
-		return jFileChooser.getSelectedFile();
 	}
 }
