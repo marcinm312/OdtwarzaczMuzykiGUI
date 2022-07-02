@@ -1,5 +1,6 @@
 package pl.marcinm312.model;
 
+import com.opencsv.CSVWriter;
 import pl.marcinm312.exception.ValidationException;
 
 import java.io.File;
@@ -40,10 +41,10 @@ public class Playlist {
 
 	public void savePlaylistToFile(File file) throws IOException {
 
-		try (FileWriter fileWriter = new FileWriter(file)) {
+		try (CSVWriter writer = new CSVWriter(new FileWriter(file), ';', '"', '"', "\n")) {
+			writer.writeNext(new String[]{"Tytuł", "Wykonawca", "Rok wydania"});
 			for (Song song : songsList) {
-				fileWriter.write(song.toString());
-				fileWriter.write("\n");
+				writer.writeNext(song.toArray());
 			}
 		}
 	}

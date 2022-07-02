@@ -45,6 +45,7 @@ public class Song implements Comparable<Song> {
 	}
 
 	private void init(String title, String performer, String publicationYear) throws ValidationException {
+
 		if (title == null || title.isEmpty()) {
 			throw new ValidationException("Nazwa utworu nie może być pusta!");
 		}
@@ -77,17 +78,17 @@ public class Song implements Comparable<Song> {
 		return publicationYear;
 	}
 
-	public String getFilePath() {
-		return filePath;
-	}
-
 	public File getFile() {
 		return file;
 	}
 
 	@Override
 	public String toString() {
-		return (getTitle() + ";" + getPerformer() + ";" + getPublicationYear() + ";" + getFilePath());
+		return (title + ";" + performer + ";" + publicationYear + ";" + filePath);
+	}
+
+	public String[] toArray() {
+		return new String[]{title, performer, publicationYear + "", filePath};
 	}
 
 	@Override
@@ -97,6 +98,7 @@ public class Song implements Comparable<Song> {
 
 	@Override
 	public boolean equals(Object o) {
+
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 
@@ -111,6 +113,7 @@ public class Song implements Comparable<Song> {
 
 	@Override
 	public int hashCode() {
+
 		int result = title != null ? title.hashCode() : 0;
 		result = 31 * result + (performer != null ? performer.hashCode() : 0);
 		result = 31 * result + publicationYear;

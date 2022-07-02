@@ -25,11 +25,10 @@ public class FilesPlayer extends Thread {
 
 		for (Song songItem : songsList) {
 			File file = songItem.getFile();
-			try {
+			try (BufferedInputStream bis = new BufferedInputStream(Files.newInputStream(file.toPath()))) {
 				if (isClosed) {
 					break;
 				}
-				BufferedInputStream bis = new BufferedInputStream(Files.newInputStream(file.toPath()));
 				player = new Player(bis);
 				player.play();
 			} catch (Exception e) {
@@ -42,6 +41,7 @@ public class FilesPlayer extends Thread {
 	}
 
 	public void stopPlayer() {
+
 		player.close();
 		isClosed = true;
 	}

@@ -32,6 +32,7 @@ public class PlaylistWindow extends JFrame implements ActionListener {
 	private static final String NEW_SONG = "Nowy utwór";
 
 	public PlaylistWindow(Playlist playlist) {
+
 		this.playlist = playlist;
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -131,6 +132,7 @@ public class PlaylistWindow extends JFrame implements ActionListener {
 	}
 
 	private void createEmptyLabels(int amount) {
+
 		for (int i = 1; i <= amount; i++) {
 			JLabel emptyLabel = new JLabel();
 			jPanel.add(emptyLabel);
@@ -188,6 +190,7 @@ public class PlaylistWindow extends JFrame implements ActionListener {
 	}
 
 	private void playSongButtonAction(int i) {
+
 		Song song = playlist.getSongsList().get(i);
 		try {
 			List<Song> singletonSongList = Collections.singletonList(song);
@@ -204,6 +207,7 @@ public class PlaylistWindow extends JFrame implements ActionListener {
 	}
 
 	private void copyButtonAction(int i) {
+
 		List<Playlist> playlistList = MainWindow.getPlaylistList();
 		List<String> playlistNamesList = getPlaylistNamesList(playlistList);
 		String[] playlistNamesArray = playlistNamesList.toArray(new String[0]);
@@ -219,6 +223,7 @@ public class PlaylistWindow extends JFrame implements ActionListener {
 	}
 
 	private void moveButtonAction(int i) {
+
 		List<Playlist> playlistList = MainWindow.getPlaylistList();
 		List<String> playlistNamesList = getPlaylistNamesList(playlistList);
 		String[] playlistNamesArray = playlistNamesList.toArray(new String[0]);
@@ -235,6 +240,7 @@ public class PlaylistWindow extends JFrame implements ActionListener {
 	}
 
 	private List<String> getPlaylistNamesList(List<Playlist> playlistList) {
+
 		List<String> playlistNamesList = new ArrayList<>();
 		for (Playlist playlistItem : playlistList) {
 			playlistNamesList.add(playlistItem.getName());
@@ -247,6 +253,7 @@ public class PlaylistWindow extends JFrame implements ActionListener {
 	}
 
 	private void playAllButtonAction() {
+
 		try {
 			startFilesPlayer(playlist.getSongsList());
 		} catch (Exception e) {
@@ -255,11 +262,13 @@ public class PlaylistWindow extends JFrame implements ActionListener {
 	}
 
 	private void sortButtonAction() {
+
 		playlist.sortPlaylist();
 		fillWindow();
 	}
 
 	private void addSongButtonAction() {
+
 		String title = JOptionPane.showInputDialog(null, "Tytuł utworu:", NEW_SONG,
 				JOptionPane.WARNING_MESSAGE);
 		String performer = JOptionPane.showInputDialog(null, "Wykonawca utworu:", NEW_SONG,
@@ -277,12 +286,14 @@ public class PlaylistWindow extends JFrame implements ActionListener {
 	}
 
 	private void stopFilesPlayer() {
+
 		if (MainWindow.getFilesPlayer() != null && MainWindow.getFilesPlayer().isAlive()) {
 			MainWindow.getFilesPlayer().stopPlayer();
 		}
 	}
 
 	private void startFilesPlayer(List<Song> songList) {
+
 		stopFilesPlayer();
 		MainWindow.setFilesPlayer(new FilesPlayer(songList));
 		MainWindow.getFilesPlayer().start();

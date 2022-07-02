@@ -18,6 +18,7 @@ public class UIUtils {
 	}
 
 	public static File getFileFromFileChooser(String filterDescription, String filterExtension, boolean isSaveDialog) {
+
 		JFileChooser jFileChooser = new JFileChooser(FileSystemView.getFileSystemView());
 		jFileChooser.setAcceptAllFileFilterUsed(false);
 		FileNameExtensionFilter extensionFilter = new FileNameExtensionFilter(filterDescription, filterExtension);
