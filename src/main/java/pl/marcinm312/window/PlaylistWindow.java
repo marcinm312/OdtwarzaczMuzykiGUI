@@ -84,7 +84,7 @@ public class PlaylistWindow extends JFrame implements ActionListener {
 
 			JLabel yearLabel = new JLabel();
 			jPanel.add(yearLabel);
-			yearLabel.setText(song.getPublicationYear() + "");
+			yearLabel.setText(song.getYear() + "");
 
 			JButton moveButton = new JButton("Przenieś utwór do...");
 			moveButtons.add(moveButton);
@@ -263,7 +263,7 @@ public class PlaylistWindow extends JFrame implements ActionListener {
 
 	private void sortButtonAction() {
 
-		playlist.sortPlaylist();
+		playlist.sortPlaylistByTitleAscending();
 		fillWindow();
 	}
 

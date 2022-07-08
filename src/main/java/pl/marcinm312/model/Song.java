@@ -8,14 +8,14 @@ public class Song {
 
 	private String title;
 	private String performer;
-	private int publicationYear;
+	private int year;
 	private String filePath;
 	private File file;
 
 
-	public Song(String title, String performer, String publicationYear, File file) throws ValidationException {
+	public Song(String title, String performer, String year, File file) throws ValidationException {
 
-		init(title, performer, publicationYear);
+		init(title, performer, year);
 
 		if (file == null) {
 			throw new ValidationException("Należy wybrać plik MP3!");
@@ -43,7 +43,7 @@ public class Song {
 		this.file = new File(filePath);
 	}
 
-	private void init(String title, String performer, String publicationYear) throws ValidationException {
+	private void init(String title, String performer, String year) throws ValidationException {
 
 		if (title == null || title.isEmpty()) {
 			throw new ValidationException("Nazwa utworu nie może być pusta!");
@@ -55,11 +55,11 @@ public class Song {
 		}
 		this.performer = performer;
 
-		if (publicationYear == null || publicationYear.isEmpty()) {
+		if (year == null || year.isEmpty()) {
 			throw new ValidationException("Rok wydania utworu nie może być pusty!");
 		}
 		try {
-			this.publicationYear = Integer.parseInt(publicationYear);
+			this.year = Integer.parseInt(year);
 		} catch (Exception e) {
 			throw new ValidationException("Wpisany rok nie jest liczbą!");
 		}
@@ -73,8 +73,8 @@ public class Song {
 		return performer;
 	}
 
-	public int getPublicationYear() {
-		return publicationYear;
+	public int getYear() {
+		return year;
 	}
 
 	public File getFile() {
@@ -83,10 +83,10 @@ public class Song {
 
 	@Override
 	public String toString() {
-		return (title + ";" + performer + ";" + publicationYear + ";" + filePath);
+		return (title + ";" + performer + ";" + year + ";" + filePath);
 	}
 
 	public String[] toArray() {
-		return new String[]{title, performer, publicationYear + "", filePath};
+		return new String[]{title, performer, year + "", filePath};
 	}
 }
