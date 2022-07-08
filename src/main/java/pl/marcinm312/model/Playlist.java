@@ -7,8 +7,8 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Playlist {
 
@@ -36,7 +36,7 @@ public class Playlist {
 	}
 
 	public void sortPlaylist() {
-		Collections.sort(songsList);
+		songsList = songsList.stream().sorted((s1, s2) -> s1.getTitle().compareToIgnoreCase(s2.getTitle())).collect(Collectors.toList());
 	}
 
 	public void savePlaylistToFile(File file) throws IOException {

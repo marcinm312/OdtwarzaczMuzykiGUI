@@ -3,9 +3,8 @@ package pl.marcinm312.model;
 import pl.marcinm312.exception.ValidationException;
 
 import java.io.File;
-import java.util.Objects;
 
-public class Song implements Comparable<Song> {
+public class Song {
 
 	private String title;
 	private String performer;
@@ -89,36 +88,5 @@ public class Song implements Comparable<Song> {
 
 	public String[] toArray() {
 		return new String[]{title, performer, publicationYear + "", filePath};
-	}
-
-	@Override
-	public int compareTo(Song song) {
-		return this.getTitle().compareTo(song.getTitle());
-	}
-
-	@Override
-	public boolean equals(Object o) {
-
-		if (this == o) return true;
-		if (o == null || getClass() != o.getClass()) return false;
-
-		Song song = (Song) o;
-
-		if (publicationYear != song.publicationYear) return false;
-		if (!Objects.equals(title, song.title)) return false;
-		if (!Objects.equals(performer, song.performer)) return false;
-		if (!Objects.equals(filePath, song.filePath)) return false;
-		return Objects.equals(file, song.file);
-	}
-
-	@Override
-	public int hashCode() {
-
-		int result = title != null ? title.hashCode() : 0;
-		result = 31 * result + (performer != null ? performer.hashCode() : 0);
-		result = 31 * result + publicationYear;
-		result = 31 * result + (filePath != null ? filePath.hashCode() : 0);
-		result = 31 * result + (file != null ? file.hashCode() : 0);
-		return result;
 	}
 }
