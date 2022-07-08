@@ -27,9 +27,9 @@ public class MainWindow extends JFrame implements ActionListener {
 
 	private final JPanel jPanel;
 	private static final List<Playlist> playlistList = new ArrayList<>();
-	private List<JButton> playlistShowButtons;
-	private List<JButton> playlistRemoveButtons;
-	private List<JButton> playlistSaveButtons;
+	private List<JButton> showPlaylistButtons;
+	private List<JButton> removePlaylistButtons;
+	private List<JButton> savePlaylistButtons;
 	private JButton addPlaylistButton;
 	private JButton loadPlaylistButton;
 	private JButton showAboutButton;
@@ -58,9 +58,9 @@ public class MainWindow extends JFrame implements ActionListener {
 		jPanel.removeAll();
 		GridLayout layout = new GridLayout(playlistList.size() + 1, 4);
 		jPanel.setLayout(layout);
-		playlistShowButtons = new ArrayList<>();
-		playlistRemoveButtons = new ArrayList<>();
-		playlistSaveButtons = new ArrayList<>();
+		showPlaylistButtons = new ArrayList<>();
+		removePlaylistButtons = new ArrayList<>();
+		savePlaylistButtons = new ArrayList<>();
 
 		for (Playlist playlist : playlistList) {
 
@@ -68,20 +68,20 @@ public class MainWindow extends JFrame implements ActionListener {
 			jPanel.add(labelWithName);
 			labelWithName.setText(playlist.getName());
 
-			JButton playlistShowButton = new JButton("Wyświetl playlistę");
-			playlistShowButtons.add(playlistShowButton);
-			jPanel.add(playlistShowButton);
-			playlistShowButton.addActionListener(this);
+			JButton showPlaylistButton = new JButton("Wyświetl playlistę");
+			showPlaylistButtons.add(showPlaylistButton);
+			jPanel.add(showPlaylistButton);
+			showPlaylistButton.addActionListener(this);
 
-			JButton playlistRemoveButton = new JButton("Usuń playlistę");
-			playlistRemoveButtons.add(playlistRemoveButton);
-			jPanel.add(playlistRemoveButton);
-			playlistRemoveButton.addActionListener(this);
+			JButton removePlaylistButton = new JButton("Usuń playlistę");
+			removePlaylistButtons.add(removePlaylistButton);
+			jPanel.add(removePlaylistButton);
+			removePlaylistButton.addActionListener(this);
 
-			JButton playlistSaveButton = new JButton("Zapisz playlistę do pliku");
-			playlistSaveButtons.add(playlistSaveButton);
-			jPanel.add(playlistSaveButton);
-			playlistSaveButton.addActionListener(this);
+			JButton savePlaylistButton = new JButton("Zapisz playlistę do pliku");
+			savePlaylistButtons.add(savePlaylistButton);
+			jPanel.add(savePlaylistButton);
+			savePlaylistButton.addActionListener(this);
 		}
 
 		addPlaylistButton = new JButton("Utwórz nową playlistę");
@@ -122,24 +122,24 @@ public class MainWindow extends JFrame implements ActionListener {
 		}
 
 		int i = 0;
-		while (i < playlistShowButtons.size()) {
-			if (eventSource == playlistShowButtons.get(i)) {
-				playlistShowButtonAction(i);
+		while (i < showPlaylistButtons.size()) {
+			if (eventSource == showPlaylistButtons.get(i)) {
+				showPlaylistButtonAction(i);
 				return;
 			}
-			if (eventSource == playlistRemoveButtons.get(i)) {
-				playlistRemoveButtonAction(i);
+			if (eventSource == removePlaylistButtons.get(i)) {
+				removePlaylistButtonAction(i);
 				return;
 			}
-			if (eventSource == playlistSaveButtons.get(i)) {
-				playlistSaveButtonAction(i);
+			if (eventSource == savePlaylistButtons.get(i)) {
+				savePlaylistButtonAction(i);
 				return;
 			}
 			i++;
 		}
 	}
 
-	private void playlistSaveButtonAction(int i) {
+	private void savePlaylistButtonAction(int i) {
 
 		try {
 			File file = UIUtils.getFileFromFileChooser("Pliki CSV", "csv", true);
@@ -151,11 +151,11 @@ public class MainWindow extends JFrame implements ActionListener {
 		}
 	}
 
-	private void playlistRemoveButtonAction(int i) {
+	private void removePlaylistButtonAction(int i) {
 		playlistList.remove(i);
 	}
 
-	private void playlistShowButtonAction(int i) {
+	private void showPlaylistButtonAction(int i) {
 
 		Playlist playlist = playlistList.get(i);
 		PlaylistWindow playlistWindow = new PlaylistWindow(playlist);
