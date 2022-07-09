@@ -20,8 +20,13 @@ public class PlaylistWindow extends JFrame implements ActionListener {
 
 	private final transient Playlist playlist;
 	private final JPanel jPanel;
+	private JButton sortByTitleAscButton;
+	private JButton sortByTitleDescButton;
+	private JButton sortByPerformerAscButton;
+	private JButton sortByPerformerDescButton;
+	private JButton sortByYearAscButton;
+	private JButton sortByYearDescButton;
 	private JButton addSongButton;
-	private JButton sortButton;
 	private JButton playAllButton;
 	private JButton stopButton;
 	private JButton refreshButton;
@@ -48,27 +53,74 @@ public class PlaylistWindow extends JFrame implements ActionListener {
 	private void fillWindow() {
 
 		jPanel.removeAll();
-		GridLayout gridLayout = new GridLayout(playlist.getSongsList().size() + 2, 7);
+		GridLayout gridLayout = new GridLayout(playlist.getSongsList().size() + 3, 7);
 		jPanel.setLayout(gridLayout);
 		moveButtons = new ArrayList<>();
 		copyButtons = new ArrayList<>();
 		removeButtons = new ArrayList<>();
 		playSongButtons = new ArrayList<>();
 
+		GridLayout sortByTitleGridLayout = new GridLayout(1, 2);
+		JPanel sortByTitleJPanel = new JPanel();
+		sortByTitleJPanel.setLayout(sortByTitleGridLayout);
+
+		sortByTitleAscButton = new JButton("˄");
+		sortByTitleJPanel.add(sortByTitleAscButton);
+		sortByTitleAscButton.addActionListener(this);
+
+		sortByTitleDescButton = new JButton("˅");
+		sortByTitleJPanel.add(sortByTitleDescButton);
+		sortByTitleDescButton.addActionListener(this);
+
+		jPanel.add(sortByTitleJPanel);
+
+		GridLayout sortByPerformerGridLayout = new GridLayout(1, 2);
+		JPanel sortByPerformerJPanel = new JPanel();
+		sortByPerformerJPanel.setLayout(sortByPerformerGridLayout);
+
+		sortByPerformerAscButton = new JButton("˄");
+		sortByPerformerJPanel.add(sortByPerformerAscButton);
+		sortByPerformerAscButton.addActionListener(this);
+
+		sortByPerformerDescButton = new JButton("˅");
+		sortByPerformerJPanel.add(sortByPerformerDescButton);
+		sortByPerformerDescButton.addActionListener(this);
+
+		jPanel.add(sortByPerformerJPanel);
+
+		GridLayout sortByYearGridLayout = new GridLayout(1, 2);
+		JPanel sortByYearJPanel = new JPanel();
+		sortByYearJPanel.setLayout(sortByYearGridLayout);
+
+		sortByYearAscButton = new JButton("˄");
+		sortByYearJPanel.add(sortByYearAscButton);
+		sortByYearAscButton.addActionListener(this);
+
+		sortByYearDescButton = new JButton("˅");
+		sortByYearJPanel.add(sortByYearDescButton);
+		sortByYearDescButton.addActionListener(this);
+
+		jPanel.add(sortByYearJPanel);
+
+		createEmptyLabels(4);
+
 		JLabel titleHeaderLabel = new JLabel();
 		titleHeaderLabel.setForeground(Color.red);
 		jPanel.add(titleHeaderLabel);
 		titleHeaderLabel.setText("Tytuł");
+		titleHeaderLabel.setHorizontalAlignment(SwingConstants.CENTER);
 
 		JLabel performerHeaderLabel = new JLabel();
 		performerHeaderLabel.setForeground(Color.red);
 		jPanel.add(performerHeaderLabel);
 		performerHeaderLabel.setText("Wykonawca");
+		performerHeaderLabel.setHorizontalAlignment(SwingConstants.CENTER);
 
 		JLabel yearHeaderLabel = new JLabel();
 		yearHeaderLabel.setForeground(Color.red);
 		jPanel.add(yearHeaderLabel);
 		yearHeaderLabel.setText("Rok wydania");
+		yearHeaderLabel.setHorizontalAlignment(SwingConstants.CENTER);
 
 		createEmptyLabels(4);
 
@@ -111,10 +163,6 @@ public class PlaylistWindow extends JFrame implements ActionListener {
 		jPanel.add(addSongButton);
 		addSongButton.addActionListener(this);
 
-		sortButton = new JButton("Sortuj utwory wg tytułów");
-		jPanel.add(sortButton);
-		sortButton.addActionListener(this);
-
 		refreshButton = new JButton("Odśwież playlistę");
 		jPanel.add(refreshButton);
 		refreshButton.addActionListener(this);
@@ -127,7 +175,7 @@ public class PlaylistWindow extends JFrame implements ActionListener {
 		jPanel.add(stopButton);
 		stopButton.addActionListener(this);
 
-		createEmptyLabels(2);
+		createEmptyLabels(3);
 		pack();
 	}
 
@@ -149,10 +197,9 @@ public class PlaylistWindow extends JFrame implements ActionListener {
 			addSongButtonAction();
 			return;
 		}
-		if (eventSource == sortButton) {
-			sortButtonAction();
-			return;
-		}
+
+		if (sortActions(eventSource)) return;
+
 		if (eventSource == stopButton) {
 			stopFilesPlayer();
 			return;
@@ -187,6 +234,34 @@ public class PlaylistWindow extends JFrame implements ActionListener {
 			}
 			i++;
 		}
+	}
+
+	private boolean sortActions(Object eventSource) {
+		if (eventSource == sortByTitleAscButton) {
+			sortByTitleAscButtonAction();
+			return true;
+		}
+		if (eventSource == sortByTitleDescButton) {
+			sortByTitleDescButtonAction();
+			return true;
+		}
+		if (eventSource == sortByPerformerAscButton) {
+			sortByPerformerAscButtonAction();
+			return true;
+		}
+		if (eventSource == sortByPerformerDescButton) {
+			sortByPerformerDescButtonAction();
+			return true;
+		}
+		if (eventSource == sortByYearAscButton) {
+			sortByYearAscButtonAction();
+			return true;
+		}
+		if (eventSource == sortByYearDescButton) {
+			sortByYearDescButtonAction();
+			return true;
+		}
+		return false;
 	}
 
 	private void playSongButtonAction(int i) {
@@ -261,9 +336,33 @@ public class PlaylistWindow extends JFrame implements ActionListener {
 		}
 	}
 
-	private void sortButtonAction() {
-
+	private void sortByTitleAscButtonAction() {
 		playlist.sortPlaylistByTitleAscending();
+		fillWindow();
+	}
+
+	private void sortByTitleDescButtonAction() {
+		playlist.sortPlaylistByTitleDescending();
+		fillWindow();
+	}
+
+	private void sortByPerformerAscButtonAction() {
+		playlist.sortPlaylistByPerformerAscending();
+		fillWindow();
+	}
+
+	private void sortByPerformerDescButtonAction() {
+		playlist.sortPlaylistByPerformerDescending();
+		fillWindow();
+	}
+
+	private void sortByYearAscButtonAction() {
+		playlist.sortPlaylistByYearAscending();
+		fillWindow();
+	}
+
+	private void sortByYearDescButtonAction() {
+		playlist.sortPlaylistByYearDescending();
 		fillWindow();
 	}
 
