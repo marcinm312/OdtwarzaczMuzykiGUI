@@ -121,6 +121,10 @@ public class MainWindow extends JFrame implements ActionListener {
 			return;
 		}
 
+		actionsForEveryPlaylist(eventSource);
+	}
+
+	private void actionsForEveryPlaylist(Object eventSource) {
 		int i = 0;
 		while (i < showPlaylistButtons.size()) {
 			if (eventSource == showPlaylistButtons.get(i)) {
