@@ -5,8 +5,8 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>pl.marcinm312</groupId>
-    <artifactId>odtwarzacz-gui</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <artifactId>player-with-simple-gui</artifactId>
+    <version>5.0</version>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
