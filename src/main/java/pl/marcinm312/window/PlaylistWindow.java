@@ -31,11 +31,14 @@ public class PlaylistWindow extends JFrame implements ActionListener {
 	private JButton playAllButton;
 	private JButton stopButton;
 	private JButton refreshButton;
+	private List<JButton> moveUpButtons;
+	private List<JButton> moveDownButtons;
 	private List<JButton> moveButtons;
 	private List<JButton> copyButtons;
 	private List<JButton> removeButtons;
 	private List<JButton> playSongButtons;
 	private static final String NEW_SONG = "Nowy utwór";
+
 
 	public PlaylistWindow(Playlist playlist) {
 
@@ -56,6 +59,8 @@ public class PlaylistWindow extends JFrame implements ActionListener {
 		jPanel.removeAll();
 		GridLayout gridLayout = new GridLayout(playlist.getSongsList().size() + 3, 7);
 		jPanel.setLayout(gridLayout);
+		moveUpButtons = new ArrayList<>();
+		moveDownButtons = new ArrayList<>();
 		moveButtons = new ArrayList<>();
 		copyButtons = new ArrayList<>();
 		removeButtons = new ArrayList<>();
@@ -103,7 +108,7 @@ public class PlaylistWindow extends JFrame implements ActionListener {
 
 		jPanel.add(sortByYearJPanel);
 
-		createEmptyLabels(4);
+		createEmptyLabels(5);
 
 		JLabel titleHeaderLabel = new JLabel();
 		titleHeaderLabel.setForeground(Color.red);
@@ -123,7 +128,7 @@ public class PlaylistWindow extends JFrame implements ActionListener {
 		yearHeaderLabel.setText("Rok wydania");
 		yearHeaderLabel.setHorizontalAlignment(SwingConstants.CENTER);
 
-		createEmptyLabels(4);
+		createEmptyLabels(5);
 
 		for (Song song : playlist.getSongsList()) {
 
@@ -138,6 +143,22 @@ public class PlaylistWindow extends JFrame implements ActionListener {
 			JLabel yearLabel = new JLabel();
 			jPanel.add(yearLabel);
 			yearLabel.setText(song.getYear() + "");
+
+			GridLayout moveUpOrDownGridLayout = new GridLayout(1, 2);
+			JPanel moveUpOrDownJPanel = new JPanel();
+			moveUpOrDownJPanel.setLayout(moveUpOrDownGridLayout);
+
+			JButton moveUpButton = new JButton("˄");
+			moveUpButtons.add(moveUpButton);
+			moveUpOrDownJPanel.add(moveUpButton);
+			moveUpButton.addActionListener(this);
+
+			JButton moveDownButton = new JButton("˅");
+			moveDownButtons.add(moveDownButton);
+			moveUpOrDownJPanel.add(moveDownButton);
+			moveDownButton.addActionListener(this);
+
+			jPanel.add(moveUpOrDownJPanel);
 
 			JButton moveButton = new JButton("Przenieś");
 			moveButtons.add(moveButton);
@@ -176,7 +197,7 @@ public class PlaylistWindow extends JFrame implements ActionListener {
 		jPanel.add(stopButton);
 		stopButton.addActionListener(this);
 
-		createEmptyLabels(3);
+		createEmptyLabels(4);
 		pack();
 	}
 
@@ -214,8 +235,20 @@ public class PlaylistWindow extends JFrame implements ActionListener {
 			return;
 		}
 
+		actionsForEverySong(eventSource);
+	}
+
+	private void actionsForEverySong(Object eventSource) {
 		int i = 0;
 		while (i < moveButtons.size()) {
+			if (eventSource == moveUpButtons.get(i)) {
+				moveUpButtonAction(i);
+				return;
+			}
+			if (eventSource == moveDownButtons.get(i)) {
+				moveDownButtonAction(i);
+				return;
+			}
 			if (eventSource == moveButtons.get(i)) {
 				moveButtonAction(i);
 				return;
@@ -226,7 +259,6 @@ public class PlaylistWindow extends JFrame implements ActionListener {
 			}
 			if (eventSource == removeButtons.get(i)) {
 				removeSongFromPlaylist(i);
-				fillWindow();
 				return;
 			}
 			if (eventSource == playSongButtons.get(i)) {
@@ -280,6 +312,7 @@ public class PlaylistWindow extends JFrame implements ActionListener {
 
 	private void removeSongFromPlaylist(int i) {
 		playlist.removeSong(i);
+		fillWindow();
 	}
 
 	private void copyButtonAction(int i) {
@@ -313,9 +346,28 @@ public class PlaylistWindow extends JFrame implements ActionListener {
 				playlistList.get(nameIndex).addSong(song);
 				removeSongFromPlaylist(i);
 			}
-			fillWindow();
 		} else {
 			UIUtils.showMessageDialog("Nie ma innej playlisty!");
+		}
+	}
+
+	private void moveDownButtonAction(int i) {
+
+		try {
+			playlist.moveSongDown(i);
+			fillWindow();
+		} catch (Exception e) {
+			UIUtils.showMessageDialog(e.getMessage());
+		}
+	}
+
+	private void moveUpButtonAction(int i) {
+
+		try {
+			playlist.moveSongUp(i);
+			fillWindow();
+		} catch (Exception e) {
+			UIUtils.showMessageDialog(e.getMessage());
 		}
 	}
 

@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -15,6 +16,7 @@ public class Playlist {
 
 	private final String name;
 	private List<Song> songsList = new ArrayList<>();
+
 
 	public Playlist(String name) throws ValidationException {
 
@@ -34,6 +36,22 @@ public class Playlist {
 
 	public void removeSong(int j) {
 		songsList.remove(j);
+	}
+
+	public void moveSongUp(int i) {
+
+		if (i == 0) {
+			throw new IndexOutOfBoundsException("Nie można przenieść wyżej pierwszego utworu!");
+		}
+		Collections.swap(songsList, i, i - 1);
+	}
+
+	public void moveSongDown(int i) {
+
+		if (i == songsList.size() - 1) {
+			throw new IndexOutOfBoundsException("Nie można przenieść niżej ostatniego utworu!");
+		}
+		Collections.swap(songsList, i, i + 1);
 	}
 
 	public void sortPlaylistByTitleAscending() {
