@@ -13,6 +13,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.swing.*;
 
@@ -138,22 +139,22 @@ public class PlaylistWindow extends JFrame implements ActionListener {
 			jPanel.add(yearLabel);
 			yearLabel.setText(song.getYear() + "");
 
-			JButton moveButton = new JButton("Przenieś utwór do...");
+			JButton moveButton = new JButton("Przenieś");
 			moveButtons.add(moveButton);
 			jPanel.add(moveButton);
 			moveButton.addActionListener(this);
 
-			JButton copyButton = new JButton("Kopiuj utwór do...");
+			JButton copyButton = new JButton("Kopiuj");
 			copyButtons.add(copyButton);
 			jPanel.add(copyButton);
 			copyButton.addActionListener(this);
 
-			JButton removeButton = new JButton("Usuń utwór z playlisty");
+			JButton removeButton = new JButton("Usuń");
 			removeButtons.add(removeButton);
 			jPanel.add(removeButton);
 			removeButton.addActionListener(this);
 
-			JButton playSongButton = new JButton("Odtwórz utwór");
+			JButton playSongButton = new JButton("Odtwórz");
 			playSongButtons.add(playSongButton);
 			jPanel.add(playSongButton);
 			playSongButton.addActionListener(this);
@@ -163,7 +164,7 @@ public class PlaylistWindow extends JFrame implements ActionListener {
 		jPanel.add(addSongButton);
 		addSongButton.addActionListener(this);
 
-		refreshButton = new JButton("Odśwież playlistę");
+		refreshButton = new JButton("Odśwież");
 		jPanel.add(refreshButton);
 		refreshButton.addActionListener(this);
 
@@ -171,7 +172,7 @@ public class PlaylistWindow extends JFrame implements ActionListener {
 		jPanel.add(playAllButton);
 		playAllButton.addActionListener(this);
 
-		stopButton = new JButton("Zatrzymaj odtwarzanie");
+		stopButton = new JButton("Zatrzymaj");
 		jPanel.add(stopButton);
 		stopButton.addActionListener(this);
 
@@ -299,19 +300,30 @@ public class PlaylistWindow extends JFrame implements ActionListener {
 
 	private void moveButtonAction(int i) {
 
-		List<Playlist> playlistList = MainWindow.getPlaylistList();
+		List<Playlist> playlistList = getPlaylistListWithoutCurrent();
 		List<String> playlistNamesList = getPlaylistNamesList(playlistList);
-		String[] playlistNamesArray = playlistNamesList.toArray(new String[0]);
-		String choosePlaylistInput = (String) JOptionPane.showInputDialog(null,
-				"Wybierz playlistę, do której chcesz przenieść utwór:", "Wybór playlisty",
-				JOptionPane.QUESTION_MESSAGE, null, playlistNamesArray, playlistNamesArray[0]);
-		if ((choosePlaylistInput != null) && (choosePlaylistInput.length() > 0)) {
-			int nameIndex = playlistNamesList.indexOf(choosePlaylistInput);
-			Song song = playlist.getSongsList().get(i);
-			playlistList.get(nameIndex).addSong(song);
-			removeSongFromPlaylist(i);
+		if (!playlistNamesList.isEmpty()) {
+			String[] playlistNamesArray = playlistNamesList.toArray(new String[0]);
+			String choosePlaylistInput = (String) JOptionPane.showInputDialog(null,
+					"Wybierz playlistę, do której chcesz przenieść utwór:", "Wybór playlisty",
+					JOptionPane.QUESTION_MESSAGE, null, playlistNamesArray, playlistNamesArray[0]);
+			if ((choosePlaylistInput != null) && (choosePlaylistInput.length() > 0)) {
+				int nameIndex = playlistNamesList.indexOf(choosePlaylistInput);
+				Song song = playlist.getSongsList().get(i);
+				playlistList.get(nameIndex).addSong(song);
+				removeSongFromPlaylist(i);
+			}
+			fillWindow();
+		} else {
+			UIUtils.showMessageDialog("Nie ma innej playlisty!");
 		}
-		fillWindow();
+	}
+
+	private List<Playlist> getPlaylistListWithoutCurrent() {
+
+		List<Playlist> playlistList = MainWindow.getPlaylistList();
+		return playlistList.stream().filter(playlistItem -> !playlistItem.getName().equals(this.playlist.getName()))
+				.collect(Collectors.toList());
 	}
 
 	private List<String> getPlaylistNamesList(List<Playlist> playlistList) {
