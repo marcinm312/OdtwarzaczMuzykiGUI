@@ -81,12 +81,12 @@ public class Song {
 		return file;
 	}
 
+	public String[] toArray() {
+		return new String[]{title, performer, year + "", filePath};
+	}
+
 	@Override
 	public String toString() {
 		return (title + ";" + performer + ";" + year + ";" + filePath);
-	}
-
-	public String[] toArray() {
-		return new String[]{title, performer, year + "", filePath};
 	}
 }
