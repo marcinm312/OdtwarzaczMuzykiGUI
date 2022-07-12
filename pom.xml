@@ -5,8 +5,8 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>pl.marcinm312</groupId>
-    <artifactId>odtwarzacz-gui</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <artifactId>player-with-simple-gui</artifactId>
+    <version>5.0</version>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -15,11 +15,26 @@
     </properties>
 
     <dependencies>
+
         <!-- https://mvnrepository.com/artifact/javazoom/jlayer -->
         <dependency>
             <groupId>javazoom</groupId>
             <artifactId>jlayer</artifactId>
             <version>1.0.1</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/commons-io/commons-io -->
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.11.0</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/com.opencsv/opencsv -->
+        <dependency>
+            <groupId>com.opencsv</groupId>
+            <artifactId>opencsv</artifactId>
+            <version>5.6</version>
         </dependency>
 
     </dependencies>
@@ -41,7 +56,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>Runner</mainClass>
+                            <mainClass>pl.marcinm312.Runner</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>
