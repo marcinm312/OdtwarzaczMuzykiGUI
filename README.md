@@ -1,10 +1,13 @@
 # Odtwarzacz muzyki z wykorzystaniem GUI
 
 Odtwarzacz plików MP3, z następującymi funkcjami:
-* tworzenie playlist;
-* zapisywanie playlist do pliku;
-* wczytywanie playlist z pliku;
+* tworzenie oraz usuwanie playlist;
+* usuwanie playlist;
+* zapisywanie playlist do pliku CSV;
+* wczytywanie playlist z pliku CSV;
 * odtwarzanie całych playlist lub wybranego utworu;
+* zatrzymywanie odtwarzania;
 * dodawanie oraz usuwanie utworów z playlist;
+* możliwość zmiany kolejności utworów na playliście;
 * możliwość kopiowania lub przenoszenia utworów między playlistami;
-* możliwość posortowania utworów alfabetycznie po tytułach.
+* możliwość sortowania utworów po tytułach, wykonawcy lub roku wydania.
