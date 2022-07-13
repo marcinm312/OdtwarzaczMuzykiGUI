@@ -34,7 +34,7 @@ public class MainWindow extends JFrame implements ActionListener {
 	private JButton loadPlaylistButton;
 	private JButton showAboutButton;
 	private static FilesPlayer filesPlayer;
-	private static final String APPLICATION_NAME = "Odtwarzacz 5.1";
+	private static final String APPLICATION_NAME = "Odtwarzacz 5.1.1";
 
 	public MainWindow() {
 
@@ -192,18 +192,25 @@ public class MainWindow extends JFrame implements ActionListener {
 						.withEscapeChar('#')
 						.withIgnoreQuotations(false)
 						.build();
-				CSVReader csvReader = new CSVReaderBuilder(bfr)
-						.withSkipLines(1)
-						.withCSVParser(parser)
-						.build();
-				readPlaylistFromFile(csvReader, playlist);
-				if (!playlist.getSongsList().isEmpty()) {
-					playlistList.add(playlist);
-					fillWindow();
-				}
+				readCsvFile(bfr, playlist, parser);
 			}
 		} catch (Exception e) {
 			UIUtils.showMessageDialog("Wystąpił błąd podczas tworzenia playlisty: " + e.getMessage());
+		}
+	}
+
+	private void readCsvFile(BufferedReader bfr, Playlist playlist, CSVParser parser) {
+		try (CSVReader csvReader = new CSVReaderBuilder(bfr)
+				.withSkipLines(1)
+				.withCSVParser(parser)
+				.build()) {
+			readPlaylistFromFile(csvReader, playlist);
+			if (!playlist.getSongsList().isEmpty()) {
+				playlistList.add(playlist);
+				fillWindow();
+			}
+		} catch (Exception e) {
+			UIUtils.showMessageDialog("Wystąpił błą podczas odczytu pliku CSV: " + e.getMessage());
 		}
 	}
 
