@@ -20,10 +20,10 @@ public class Playlist {
 
 	public Playlist(String name) throws ValidationException {
 
-		if (name == null || name.isEmpty()) {
+		if (name == null || name.trim().isEmpty()) {
 			throw new ValidationException("Nazwa playlisty nie może być pusta!");
 		}
-		this.name = name;
+		this.name = name.trim();
 	}
 
 	public String getName() {

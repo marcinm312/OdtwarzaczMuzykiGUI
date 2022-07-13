@@ -45,21 +45,21 @@ public class Song {
 
 	private void init(String title, String performer, String year) throws ValidationException {
 
-		if (title == null || title.isEmpty()) {
+		if (title == null || title.trim().isEmpty()) {
 			throw new ValidationException("Nazwa utworu nie może być pusta!");
 		}
-		this.title = title;
+		this.title = title.trim();
 
-		if (performer == null || performer.isEmpty()) {
+		if (performer == null || performer.trim().isEmpty()) {
 			throw new ValidationException("Nazwa wykonawcy nie może być pusta!");
 		}
-		this.performer = performer;
+		this.performer = performer.trim();
 
-		if (year == null || year.isEmpty()) {
+		if (year == null || year.trim().isEmpty()) {
 			throw new ValidationException("Rok wydania utworu nie może być pusty!");
 		}
 		try {
-			this.year = Integer.parseInt(year);
+			this.year = Integer.parseInt(year.trim());
 		} catch (Exception e) {
 			throw new ValidationException("Wpisany rok nie jest liczbą!");
 		}
