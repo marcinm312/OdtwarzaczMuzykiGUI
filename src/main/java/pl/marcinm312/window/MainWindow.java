@@ -34,7 +34,7 @@ public class MainWindow extends JFrame implements ActionListener {
 	private JButton loadPlaylistButton;
 	private JButton showAboutButton;
 	private static FilesPlayer filesPlayer;
-	private static final String APPLICATION_NAME = "Odtwarzacz 5.1.1";
+	private static final String APPLICATION_NAME = "Odtwarzacz 5.1.2";
 
 	public MainWindow() {
 
@@ -210,7 +210,7 @@ public class MainWindow extends JFrame implements ActionListener {
 				fillWindow();
 			}
 		} catch (Exception e) {
-			UIUtils.showMessageDialog("Wystąpił błą podczas odczytu pliku CSV: " + e.getMessage());
+			UIUtils.showMessageDialog("Wystąpił błąd podczas odczytu pliku CSV: " + e.getMessage());
 		}
 	}
 
