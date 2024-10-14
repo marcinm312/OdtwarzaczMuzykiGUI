@@ -157,6 +157,7 @@ public class MainWindow extends JFrame implements ActionListener {
 
 	private void removePlaylistButtonAction(int i) {
 		playlistList.remove(i);
+		fillWindow();
 	}
 
 	private void showPlaylistButtonAction(int i) {
