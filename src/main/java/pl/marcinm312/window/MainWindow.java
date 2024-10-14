@@ -34,7 +34,7 @@ public class MainWindow extends JFrame implements ActionListener {
 	private JButton loadPlaylistButton;
 	private JButton showAboutButton;
 	private static FilesPlayer filesPlayer;
-	private static final String APPLICATION_NAME = "Odtwarzacz 5.1.2";
+	private static final String APPLICATION_NAME = "Odtwarzacz 5.1.3";
 
 	public MainWindow() {
 
@@ -113,7 +113,7 @@ public class MainWindow extends JFrame implements ActionListener {
 			return;
 		}
 		if (eventSource == showAboutButton) {
-			UIUtils.showMessageDialog(APPLICATION_NAME + "\n\nCopyright (C) 2022\nMarcin Michalczyk");
+			UIUtils.showMessageDialog(APPLICATION_NAME + "\n\nCopyright (C) 2024\nMarcin Michalczyk");
 			return;
 		}
 		if (eventSource == loadPlaylistButton) {
@@ -157,6 +157,7 @@ public class MainWindow extends JFrame implements ActionListener {
 
 	private void removePlaylistButtonAction(int i) {
 		playlistList.remove(i);
+		fillWindow();
 	}
 
 	private void showPlaylistButtonAction(int i) {
