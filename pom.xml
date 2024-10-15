@@ -6,7 +6,7 @@
 
     <groupId>pl.marcinm312</groupId>
     <artifactId>player-with-simple-gui</artifactId>
-    <version>5.1.3</version>
+    <version>5.1.4</version>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

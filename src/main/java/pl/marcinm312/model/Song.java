@@ -16,7 +16,6 @@ public class Song {
 	public Song(String title, String performer, String year, File file) throws ValidationException {
 
 		init(title, performer, year);
-
 		if (file == null) {
 			throw new ValidationException("Należy wybrać plik MP3!");
 		}
@@ -32,7 +31,8 @@ public class Song {
 		init(songArray[0], songArray[1], songArray[2], songArray[3]);
 	}
 
-	private void init(String title, String performer, String publicationYear, String filePath) throws ValidationException {
+	private void init(String title, String performer, String publicationYear, String filePath)
+			throws ValidationException {
 
 		init(title, performer, publicationYear);
 

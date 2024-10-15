@@ -55,19 +55,27 @@ public class Playlist {
 	}
 
 	public void sortPlaylistByTitleAscending() {
-		songsList = songsList.stream().sorted((s1, s2) -> s1.getTitle().compareToIgnoreCase(s2.getTitle())).collect(Collectors.toList());
+
+		songsList = songsList.stream().sorted((s1, s2) -> s1.getTitle()
+				.compareToIgnoreCase(s2.getTitle())).collect(Collectors.toList());
 	}
 
 	public void sortPlaylistByTitleDescending() {
-		songsList = songsList.stream().sorted((s1, s2) -> s2.getTitle().compareToIgnoreCase(s1.getTitle())).collect(Collectors.toList());
+
+		songsList = songsList.stream().sorted((s1, s2) -> s2.getTitle()
+				.compareToIgnoreCase(s1.getTitle())).collect(Collectors.toList());
 	}
 
 	public void sortPlaylistByPerformerAscending() {
-		songsList = songsList.stream().sorted((s1, s2) -> s1.getPerformer().compareToIgnoreCase(s2.getPerformer())).collect(Collectors.toList());
+
+		songsList = songsList.stream().sorted((s1, s2) -> s1.getPerformer()
+				.compareToIgnoreCase(s2.getPerformer())).collect(Collectors.toList());
 	}
 
 	public void sortPlaylistByPerformerDescending() {
-		songsList = songsList.stream().sorted((s1, s2) -> s2.getPerformer().compareToIgnoreCase(s1.getPerformer())).collect(Collectors.toList());
+
+		songsList = songsList.stream().sorted((s1, s2) -> s2.getPerformer()
+				.compareToIgnoreCase(s1.getPerformer())).collect(Collectors.toList());
 	}
 
 	public void sortPlaylistByYearAscending() {
@@ -75,7 +83,9 @@ public class Playlist {
 	}
 
 	public void sortPlaylistByYearDescending() {
-		songsList = songsList.stream().sorted(Comparator.comparingInt(Song::getYear).reversed()).collect(Collectors.toList());
+
+		songsList = songsList.stream().sorted(Comparator.comparingInt(Song::getYear).reversed())
+				.collect(Collectors.toList());
 	}
 
 	public void savePlaylistToFile(File file) throws IOException {
@@ -90,9 +100,5 @@ public class Playlist {
 
 	public List<Song> getSongsList() {
 		return songsList;
-	}
-
-	public void setSongsList(List<Song> songsList) {
-		this.songsList = songsList;
 	}
 }
