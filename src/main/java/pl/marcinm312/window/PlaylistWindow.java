@@ -458,16 +458,12 @@ public class PlaylistWindow extends JFrame implements ActionListener {
 	}
 
 	private void stopFilesPlayer() {
-
-		if (MainWindow.getFilesPlayer() != null && MainWindow.getFilesPlayer().isAlive()) {
-			MainWindow.getFilesPlayer().stopPlayer();
-		}
+		FilesPlayer.getInstance().interrupt();
 	}
 
 	private void startFilesPlayer(List<Song> songList) {
 
 		stopFilesPlayer();
-		MainWindow.setFilesPlayer(new FilesPlayer(songList));
-		MainWindow.getFilesPlayer().start();
+		FilesPlayer.getInstance(songList).start();
 	}
 }

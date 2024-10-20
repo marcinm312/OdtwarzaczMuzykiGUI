@@ -7,7 +7,6 @@ import com.opencsv.CSVReaderBuilder;
 import com.opencsv.exceptions.CsvValidationException;
 import pl.marcinm312.model.Playlist;
 import pl.marcinm312.model.Song;
-import pl.marcinm312.utils.FilesPlayer;
 import pl.marcinm312.utils.UIUtils;
 
 import java.awt.GridLayout;
@@ -33,7 +32,6 @@ public class MainWindow extends JFrame implements ActionListener {
 	private JButton addPlaylistButton;
 	private JButton loadPlaylistButton;
 	private JButton showAboutButton;
-	private static FilesPlayer filesPlayer;
 	private static final String APPLICATION_NAME = "Odtwarzacz 5.1.4";
 
 	public MainWindow() {
@@ -247,13 +245,5 @@ public class MainWindow extends JFrame implements ActionListener {
 		} catch (Exception e) {
 			UIUtils.showMessageDialog("Wystąpił błąd: " + e.getMessage());
 		}
-	}
-
-	public static FilesPlayer getFilesPlayer() {
-		return filesPlayer;
-	}
-
-	public static void setFilesPlayer(FilesPlayer filesPlayer) {
-		MainWindow.filesPlayer = filesPlayer;
 	}
 }
