@@ -7,7 +7,6 @@ import com.opencsv.CSVReaderBuilder;
 import com.opencsv.exceptions.CsvValidationException;
 import pl.marcinm312.model.Playlist;
 import pl.marcinm312.model.Song;
-import pl.marcinm312.utils.FilesPlayer;
 import pl.marcinm312.utils.UIUtils;
 
 import java.awt.GridLayout;
@@ -33,8 +32,7 @@ public class MainWindow extends JFrame implements ActionListener {
 	private JButton addPlaylistButton;
 	private JButton loadPlaylistButton;
 	private JButton showAboutButton;
-	private static FilesPlayer filesPlayer;
-	private static final String APPLICATION_NAME = "Odtwarzacz 5.1.3";
+	private static final String APPLICATION_NAME = "Odtwarzacz 5.1.4";
 
 	public MainWindow() {
 
@@ -125,6 +123,7 @@ public class MainWindow extends JFrame implements ActionListener {
 	}
 
 	private void actionsForEveryPlaylist(Object eventSource) {
+
 		int i = 0;
 		while (i < showPlaylistButtons.size()) {
 			if (eventSource == showPlaylistButtons.get(i)) {
@@ -156,14 +155,14 @@ public class MainWindow extends JFrame implements ActionListener {
 	}
 
 	private void removePlaylistButtonAction(int i) {
+
 		playlistList.remove(i);
 		fillWindow();
 	}
 
 	private void showPlaylistButtonAction(int i) {
 
-		Playlist playlist = playlistList.get(i);
-		PlaylistWindow playlistWindow = new PlaylistWindow(playlist);
+		PlaylistWindow playlistWindow = new PlaylistWindow(playlistList.get(i));
 		playlistWindow.setVisible(true);
 	}
 
@@ -182,8 +181,8 @@ public class MainWindow extends JFrame implements ActionListener {
 	private void createNewPlaylistFromFile(FileReader fr) {
 
 		try (BufferedReader bfr = new BufferedReader(fr)) {
-			String playlistName = JOptionPane.showInputDialog(null, "Nazwa nowo wczytanej playlisty", "Nowa playlista",
-					JOptionPane.WARNING_MESSAGE);
+			String playlistName = JOptionPane.showInputDialog(null, "Nazwa nowo wczytanej playlisty",
+					"Nowa playlista", JOptionPane.WARNING_MESSAGE);
 			Playlist playlist = new Playlist(playlistName);
 			if (playlistList.contains(playlist)) {
 				UIUtils.showMessageDialog("Playlista o takiej nazwie już istnieje!");
@@ -201,6 +200,7 @@ public class MainWindow extends JFrame implements ActionListener {
 	}
 
 	private void readCsvFile(BufferedReader bfr, Playlist playlist, CSVParser parser) {
+
 		try (CSVReader csvReader = new CSVReaderBuilder(bfr)
 				.withSkipLines(1)
 				.withCSVParser(parser)
@@ -222,7 +222,6 @@ public class MainWindow extends JFrame implements ActionListener {
 			try {
 				playlist.addSong(new Song(line));
 			} catch (Exception e) {
-				playlist.setSongsList(new ArrayList<>());
 				UIUtils.showMessageDialog("Wystąpił błąd podczas dodawania utworu:\n"
 						+ Arrays.toString(line) + "\n"
 						+ e.getMessage());
@@ -233,8 +232,8 @@ public class MainWindow extends JFrame implements ActionListener {
 
 	private void addPlaylistButtonAction() {
 
-		String playlistName = JOptionPane.showInputDialog(null, "Nazwa nowej playlisty:", "Nowa playlista",
-				JOptionPane.WARNING_MESSAGE);
+		String playlistName = JOptionPane.showInputDialog(null, "Nazwa nowej playlisty:",
+				"Nowa playlista", JOptionPane.WARNING_MESSAGE);
 		try {
 			Playlist playlist = new Playlist(playlistName);
 			if (playlistList.contains(playlist)) {
@@ -246,13 +245,5 @@ public class MainWindow extends JFrame implements ActionListener {
 		} catch (Exception e) {
 			UIUtils.showMessageDialog("Wystąpił błąd: " + e.getMessage());
 		}
-	}
-
-	public static FilesPlayer getFilesPlayer() {
-		return filesPlayer;
-	}
-
-	public static void setFilesPlayer(FilesPlayer filesPlayer) {
-		MainWindow.filesPlayer = filesPlayer;
 	}
 }

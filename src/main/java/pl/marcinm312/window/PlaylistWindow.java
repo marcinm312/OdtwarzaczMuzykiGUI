@@ -239,6 +239,7 @@ public class PlaylistWindow extends JFrame implements ActionListener {
 	}
 
 	private void actionsForEverySong(Object eventSource) {
+
 		int i = 0;
 		while (i < moveButtons.size()) {
 			if (eventSource == moveUpButtons.get(i)) {
@@ -270,6 +271,7 @@ public class PlaylistWindow extends JFrame implements ActionListener {
 	}
 
 	private boolean sortActions(Object eventSource) {
+
 		if (eventSource == sortByTitleAscButton) {
 			sortByTitleAscButtonAction();
 			return true;
@@ -311,6 +313,7 @@ public class PlaylistWindow extends JFrame implements ActionListener {
 	}
 
 	private void removeSongFromPlaylist(int i) {
+
 		playlist.removeSong(i);
 		fillWindow();
 	}
@@ -323,7 +326,7 @@ public class PlaylistWindow extends JFrame implements ActionListener {
 		String choosePlaylistInput = (String) JOptionPane.showInputDialog(null,
 				"Wybierz playlistę, do której chcesz skopiować utwór:", "Wybór playlisty",
 				JOptionPane.QUESTION_MESSAGE, null, playlistNamesArray, playlistNamesArray[0]);
-		if ((choosePlaylistInput != null) && (choosePlaylistInput.length() > 0)) {
+		if (choosePlaylistInput != null && !choosePlaylistInput.isEmpty()) {
 			int nameIndex = playlistNamesList.indexOf(choosePlaylistInput);
 			Song song = playlist.getSongsList().get(i);
 			playlistList.get(nameIndex).addSong(song);
@@ -340,7 +343,7 @@ public class PlaylistWindow extends JFrame implements ActionListener {
 			String choosePlaylistInput = (String) JOptionPane.showInputDialog(null,
 					"Wybierz playlistę, do której chcesz przenieść utwór:", "Wybór playlisty",
 					JOptionPane.QUESTION_MESSAGE, null, playlistNamesArray, playlistNamesArray[0]);
-			if ((choosePlaylistInput != null) && (choosePlaylistInput.length() > 0)) {
+			if (choosePlaylistInput != null && !choosePlaylistInput.isEmpty()) {
 				int nameIndex = playlistNamesList.indexOf(choosePlaylistInput);
 				Song song = playlist.getSongsList().get(i);
 				playlistList.get(nameIndex).addSong(song);
@@ -401,31 +404,37 @@ public class PlaylistWindow extends JFrame implements ActionListener {
 	}
 
 	private void sortByTitleAscButtonAction() {
+
 		playlist.sortPlaylistByTitleAscending();
 		fillWindow();
 	}
 
 	private void sortByTitleDescButtonAction() {
+
 		playlist.sortPlaylistByTitleDescending();
 		fillWindow();
 	}
 
 	private void sortByPerformerAscButtonAction() {
+
 		playlist.sortPlaylistByPerformerAscending();
 		fillWindow();
 	}
 
 	private void sortByPerformerDescButtonAction() {
+
 		playlist.sortPlaylistByPerformerDescending();
 		fillWindow();
 	}
 
 	private void sortByYearAscButtonAction() {
+
 		playlist.sortPlaylistByYearAscending();
 		fillWindow();
 	}
 
 	private void sortByYearDescButtonAction() {
+
 		playlist.sortPlaylistByYearDescending();
 		fillWindow();
 	}
@@ -449,16 +458,12 @@ public class PlaylistWindow extends JFrame implements ActionListener {
 	}
 
 	private void stopFilesPlayer() {
-
-		if (MainWindow.getFilesPlayer() != null && MainWindow.getFilesPlayer().isAlive()) {
-			MainWindow.getFilesPlayer().stopPlayer();
-		}
+		FilesPlayer.getInstance().interrupt();
 	}
 
 	private void startFilesPlayer(List<Song> songList) {
 
 		stopFilesPlayer();
-		MainWindow.setFilesPlayer(new FilesPlayer(songList));
-		MainWindow.getFilesPlayer().start();
+		FilesPlayer.getInstance(songList).start();
 	}
 }
